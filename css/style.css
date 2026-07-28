@@ -1,0 +1,1576 @@
+/* ============================================================
+   FD Manager — visual system
+   Palette:
+     Navy (sidebar/brand)   #0f1f38 / #14274a
+     Gold (accent/active)   #c8952b
+     Teal (secondary accent)#0e7c86
+     Slate background       #eef1f6
+     Ink / muted text       #101828 / #66738a
+     Surface / border       #ffffff / #e3e8ef
+     Status: success #067a46 / warning #b54708 / danger #b42318 / info #175cd3
+   Type: system sans stack, tightened tracking on labels, numeric
+   tabular figures on money values.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap');
+
+:root {
+	--navy-900: #24334f;
+	--navy-800: #2b3c5c;
+	--navy-700: #34486e;
+	--navy-600: #3d5480;
+	--gold: #c8952b;
+	--gold-light: #f2d9a6;
+	--teal: #0e7c86;
+	--teal-light: #d9f0ef;
+	--slate-bg: #eef1f6;
+	--surface: #ffffff;
+	--border: #e3e8ef;
+	--border-soft: #edf1f5;
+	--ink: #101828;
+	--ink-muted: #66738a;
+	--ink-faint: #98a3b8;
+	--success: #067a46;
+	--success-bg: #e9f9f0;
+	--warning: #b54708;
+	--warning-bg: #fff6e8;
+	--danger: #b42318;
+	--danger-bg: #fdeeec;
+	--info: #175cd3;
+	--info-bg: #ecf3ff;
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 14px;
+	--shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 8px rgba(16, 24, 40, 0.05);
+	--shadow-card-hover: 0 4px 14px rgba(16, 24, 40, 0.09);
+}
+
+/* The preliminary styles for the application */
+html,
+body,
+#content,
+#content .sapMShell,
+#content .sapMShellGlobalInnerBackground,
+#content .sapMPage {
+	height: 100%;
+}
+
+.fdShell,
+.fdPage {
+	background: var(--slate-bg);
+}
+
+.fdPage > section {
+	height: 100%;
+}
+
+.fdAppFrame {
+	height: 100vh;
+	min-height: 600px;
+	width: 100%;
+	overflow: hidden;
+	background: var(--slate-bg);
+	font-family: 'Inter', Arial, Helvetica, sans-serif;
+	color: var(--ink);
+}
+
+/* ---------- Sidebar (signature element) ---------- */
+
+.fdSidebar {
+	position: relative;
+	width: 220px;
+	flex: 0 0 220px;
+	padding: 24px 16px;
+	background: linear-gradient(180deg, var(--navy-800) 0%, var(--navy-900) 100%);
+	border-right: 1px solid rgba(255, 255, 255, 0.05);
+	box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+	overflow: hidden;
+}
+
+/* ambient glow behind logo — subtle depth, not decoration for its own sake */
+.fdSidebar::before {
+	content: "";
+	position: absolute;
+	top: -80px;
+	left: -60px;
+	width: 300px;
+	height: 300px;
+	background: radial-gradient(circle, rgba(200, 149, 43, 0.15) 0%, rgba(200, 149, 43, 0) 70%);
+	pointer-events: none;
+}
+
+/* the gold current: a hairline that runs the height of the nav column,
+   with the active item drawing power from it */
+.fdSidebar::after {
+	content: "";
+	position: absolute;
+	top: 148px;
+	bottom: 84px;
+	left: 16px;
+	width: 2px;
+	background: linear-gradient(180deg, rgba(200, 149, 43, 0.35) 0%, rgba(200, 149, 43, 0.05) 100%);
+	pointer-events: none;
+}
+
+.fdSidebar > * {
+	position: relative;
+	z-index: 1;
+}
+
+.fdLogo {
+	padding: 0 8px 24px;
+	margin-bottom: 16px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fdLogoTitle {
+	gap: 10px;
+	font-size: 16px;
+	font-weight: 800;
+	color: #ffffff;
+	letter-spacing: 0.02em;
+}
+
+.fdLogoIcon {
+	color: var(--gold);
+	font-size: 20px;
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+	border-radius: 8px;
+	background: rgba(200, 149, 43, 0.15);
+	box-shadow: 0 0 12px rgba(200, 149, 43, 0.2);
+}
+
+.fdLogoSub {
+	margin-top: 6px;
+	font-size: 11px;
+	color: #a0aec0;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+
+.fdNavSection {
+	padding: 16px 12px 8px;
+	font-size: 11px;
+	font-weight: 700;
+	color: #829ab1;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.fdNavButton.sapMBtn {
+	width: 100%;
+	height: 40px;
+	padding: 0;
+	margin: 2px 0;
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.fdNavButton.sapMBtn:focus, 
+.fdNavButton.sapMBtn .sapMBtnInner:focus,
+.fdNavButton.sapMBtn .sapMBtnInner.sapMFocusable {
+	outline: none !important;
+	border: none !important;
+}
+
+.fdNavButton.sapMBtn .sapMBtnInner {
+	justify-content: flex-start !important;
+	padding: 0 12px 0 14px !important;
+	border: 0 !important;
+	border-left: 3px solid transparent !important;
+	border-radius: 6px !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	color: #cbd5e1 !important;
+	font-size: 13.5px;
+	font-weight: 500;
+	text-shadow: none !important;
+	position: relative;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fdNavButton.sapMBtn:hover .sapMBtnInner {
+	background: rgba(255, 255, 255, 0.1) !important;
+	color: #ffffff !important;
+	padding-left: 14px !important;
+}
+
+.fdNavButton .sapMBtnIcon {
+	width: 24px;
+	color: inherit !important;
+	font-size: 14px;
+	transition: color 0.15s ease;
+}
+
+.fdNavButton .sapMBtnInner.sapMBtnEmphasized {
+	border-left-color: var(--gold) !important;
+	background: rgba(200, 149, 43, 0.16) !important;
+	color: var(--gold-light) !important;
+	font-weight: 600;
+	box-shadow: inset 0 0 0 1px rgba(200, 149, 43, 0.14) !important;
+}
+
+/* the active item taps directly into the gold current running down the rail */
+.fdNavButton .sapMBtnInner.sapMBtnEmphasized::before {
+	content: "";
+	position: absolute;
+	left: -14px;
+	top: 50%;
+	width: 6px;
+	height: 6px;
+	transform: translateY(-50%);
+	border-radius: 999px;
+	background: var(--gold);
+	box-shadow: 0 0 8px 1px rgba(200, 149, 43, 0.7);
+}
+
+.fdAlertNav .sapMBtnInner {
+	position: relative;
+}
+
+/* small pulse to draw the eye without being noisy */
+.fdAlertNav .sapMBtnIcon {
+	animation: fdAlertPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes fdAlertPulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.55; }
+}
+
+/* ---------- Sidebar footer / user block ---------- */
+
+.fdSidebarSpacer {
+	flex: 1 1 auto;
+}
+
+.fdSidebarUser {
+	gap: 10px;
+	margin-top: 8px;
+	padding: 12px 10px;
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.fdUserAvatar {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 14px;
+	color: var(--navy-900);
+	background: var(--gold-light);
+	border-radius: 999px;
+	flex-shrink: 0;
+}
+
+.fdUserInfo {
+	min-width: 0;
+	gap: 1px;
+}
+
+.fdUserName {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #eef1f6;
+}
+
+.fdUserSub {
+	font-size: 10.5px;
+	color: #93a3c4;
+}
+
+/* ---------- Main column ---------- */
+
+.fdMain {
+	flex: 1 1 auto;
+	min-width: 0;
+	height: 100%;
+	background: var(--slate-bg);
+}
+
+.fdTopbar.sapMTB {
+	height: 60px;
+	padding: 0 28px;
+	background: var(--surface) !important;
+	background-image: none !important;
+	border-bottom: 1px solid var(--border);
+	box-shadow: none !important;
+}
+
+.fdPageTitle {
+	font-size: 18px;
+	font-weight: 800;
+	color: var(--ink);
+	letter-spacing: -0.015em;
+}
+
+.fdPeriodText {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--ink-muted);
+	padding: 5px 10px;
+	background: var(--slate-bg);
+	border-radius: 999px;
+	margin-right: 10px;
+}
+
+.fdContent {
+	height: calc(100vh - 60px);
+	padding: 28px 32px 48px;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.fdContent::-webkit-scrollbar {
+	width: 10px;
+}
+
+.fdContent::-webkit-scrollbar-thumb {
+	background: #d3dae4;
+	border-radius: 8px;
+}
+
+.fdContent::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* ---------- Page-section motion ---------- */
+/* Applied to each top-level tab VBox. Because UI5's `visible` binding
+   toggles display:none <-> flex, the element re-enters the render tree
+   each time a tab is opened, which restarts this animation — giving a
+   deliberate settle-in instead of an abrupt swap. No JS required. */
+
+.fdPageSection {
+	animation: fdSectionFade 0.38s ease both;
+}
+
+@keyframes fdSectionFade {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ---------- Buttons ---------- */
+
+.fdSmallButton .sapMBtnInner {
+	border-radius: var(--radius-sm);
+	font-size: 12.5px;
+	font-weight: 600;
+	padding: 0 12px;
+	border-color: var(--border);
+	color: var(--ink);
+	transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.fdSmallButton .sapMBtnInner:hover {
+	box-shadow: 0 1px 4px rgba(16, 24, 40, 0.1);
+}
+
+.fdActionButton,
+.fdCreateButton {
+	margin-top: 14px;
+}
+
+.fdActionButton .sapMBtnInner,
+.fdCreateButton .sapMBtnInner {
+	border-radius: var(--radius-sm);
+	font-size: 13px;
+	font-weight: 600;
+	padding: 0 16px;
+}
+
+.sapMBtnEmphasized .sapMBtnInner,
+button.fdActionButton.sapMBtnEmphasized,
+.fdCreateButton.sapMBtnEmphasized .sapMBtnInner {
+	background: var(--navy-700) !important;
+	border-color: var(--navy-700) !important;
+	transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.sapMBtnEmphasized .sapMBtnInner:hover {
+	background: var(--navy-600) !important;
+	transform: translateY(-1px);
+}
+
+/* ---------- Metric cards ---------- */
+
+.fdMetricGrid {
+	gap: 14px;
+	margin-bottom: 28px;
+	flex-wrap: wrap;
+}
+
+.fdMetricCard {
+	position: relative;
+	min-width: 200px;
+	flex: 1 1 200px;
+	padding: 18px 20px;
+	background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--border);
+	border-top: 3px solid var(--teal);
+	box-shadow: var(--shadow-card);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+	opacity: 0;
+	animation: fdCardIn 0.45s ease forwards;
+}
+
+/* staggered entrance — one orchestrated moment on load, not scattered effects */
+.fdMetricGrid > .fdMetricCard:nth-child(1) { animation-delay: 0.02s; }
+.fdMetricGrid > .fdMetricCard:nth-child(2) { animation-delay: 0.08s; }
+.fdMetricGrid > .fdMetricCard:nth-child(3) { animation-delay: 0.14s; }
+.fdMetricGrid > .fdMetricCard:nth-child(4) { animation-delay: 0.2s; }
+
+@keyframes fdCardIn {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.fdMetricCard:hover {
+	box-shadow: var(--shadow-card-hover);
+	transform: translateY(-2px);
+}
+
+/* KPI tiles that filter the FD table on click */
+.fdMetricCard.fdKpiClickable {
+	cursor: pointer;
+}
+
+.fdMetricCard.fdKpiClickable:active {
+	transform: translateY(0);
+	box-shadow: var(--shadow-card);
+}
+
+.fdQuickFilterBar {
+	margin: 2px 0 16px;
+}
+
+.fdMetricGrid > .fdMetricCard:nth-child(2) {
+	border-top-color: var(--info);
+}
+
+.fdMetricGrid > .fdMetricCard:nth-child(3) {
+	border-top-color: var(--danger);
+}
+
+.fdMetricHead {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.fdMetricLabel {
+	font-size: 10px;
+	font-weight: 700;
+	color: var(--ink-faint);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.fdMetricValue {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
+}
+
+.fdMetricDanger {
+	color: var(--danger);
+}
+
+.fdMetricSuccess {
+	color: var(--success);
+}
+
+.fdMetricSub,
+.fdMuted {
+	margin-top: 4px;
+	font-size: 10.5px;
+	color: var(--ink-muted);
+}
+
+/* sparkline / microchart docked into the metric card */
+.fdMetricChart {
+	flex-shrink: 0;
+	opacity: 0.9;
+}
+
+.fdMetricChart .sapSuiteLMC,
+.fdMetricChart .sapSuiteRMC {
+	overflow: visible;
+}
+
+.fdMetricRing {
+	flex-shrink: 0;
+}
+
+/* ---------- Metric icon badges ---------- */
+/* Small inline badge variant (used beside labels/values) */
+
+.fdMetricIcon {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 15px;
+	border-radius: 8px;
+	flex-shrink: 0;
+}
+
+.fdMetricIconTeal {
+	color: var(--teal);
+	background: var(--teal-light);
+}
+
+.fdMetricIconInfo {
+	color: var(--info);
+	background: var(--info-bg);
+}
+
+.fdMetricIconDanger {
+	color: var(--danger);
+	background: var(--danger-bg);
+}
+
+/* Large circular badge variant (hero icon inside a metric card) */
+
+.fdMetricBigIcon{
+    width:64px;
+    height:64px;
+    line-height:64px;
+    text-align:center;
+    border-radius:50%;
+    font-size:28px;
+    color:#fff;
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+    transition:.3s;
+}
+.fdMetricCard:hover .fdMetricBigIcon{
+    transform:scale(1.1) rotate(-8deg);
+}
+.fdBlueIcon{
+    background:linear-gradient(135deg,#2563EB,#60A5FA);
+}
+.fdGreenIcon{
+    background:linear-gradient(135deg,#10B981,#34D399);
+}
+.fdOrangeIcon{
+    background:linear-gradient(135deg,#F97316,#FDBA74);
+}
+.fdPurpleIcon{
+    background:linear-gradient(135deg,#8B5CF6,#A78BFA);
+}
+.fdTealIcon{
+    background:linear-gradient(135deg,#0e7c86,#4fc3c0);
+}
+
+.fdLoadStatus {
+	display: inline-flex;
+	margin-bottom: 16px;
+	padding: 5px 12px;
+	font-size: 12px;
+	font-weight: 500;
+	border-radius: 999px;
+	background: var(--info-bg);
+	color: var(--info);
+}
+
+.fdDataTable .sapMListNoData,
+.fdDataTable .sapMListTblNoData {
+	padding: 28px 14px;
+}
+
+.fdDataTable .sapMListNoDataText {
+	font-size: 13px;
+	color: var(--ink-muted);
+}
+
+.fdRequiredNote {
+	font-size: 11.5px;
+	color: var(--ink-faint);
+}
+
+/* ---------- Section cards & tables ---------- */
+
+.fdSectionCard {
+	margin-bottom: 18px;
+	padding: 20px 22px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-card);
+}
+
+.fdSectionHeader.sapMTB {
+	height: 40px;
+	padding: 0;
+	margin-bottom: 12px;
+	background: transparent;
+	border: 0;
+}
+
+.fdSectionHeader .sapMTitle {
+	font-size: 14.5px;
+	font-weight: 700;
+	color: var(--ink);
+	letter-spacing: -0.005em;
+}
+
+/* ---------- Insights row: rate comparison / upcoming events / bank allocation ---------- */
+
+.fdInsightsGrid {
+	gap: 18px;
+	margin-bottom: 18px;
+	align-items: stretch;
+	flex-wrap: wrap;
+}
+
+.fdInsightCard {
+	flex: 1 1 320px;
+	min-width: 300px;
+	margin-bottom: 0;
+	opacity: 0;
+	animation: fdCardIn 0.45s ease forwards;
+	animation-delay: 0.26s;
+}
+
+.fdInsightsGrid > .fdInsightCard:nth-child(2) { animation-delay: 0.32s; }
+.fdInsightsGrid > .fdInsightCard:nth-child(3) { animation-delay: 0.38s; }
+
+/* Rate comparison — plain sap.m.ProgressIndicator rows, no extra library needed */
+
+.fdRateList {
+	gap: 12px;
+	margin-top: 4px;
+}
+
+.fdRateRow {
+	gap: 12px;
+}
+
+.fdRateBank {
+	flex: 0 0 34%;
+	max-width: 34%;
+	font-size: 12.5px;
+	font-weight: 600;
+	color: var(--ink);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.fdRateBar {
+	flex: 1 1 auto;
+	height: 22px;
+	border-radius: 999px;
+}
+
+.fdRateBar.sapMPI .sapMPIBar {
+	background: var(--teal);
+	border-radius: 999px;
+}
+
+.fdRateBar.fdRateTop.sapMPI .sapMPIBar {
+	background: var(--gold);
+}
+
+.fdRateBar.sapMPI {
+	border-radius: 999px;
+	background: var(--slate-bg);
+}
+
+.fdRateBar .sapMPIValue {
+	font-size: 11px;
+	font-weight: 700;
+}
+
+/* Upcoming events */
+
+.fdEventList {
+	gap: 10px;
+}
+
+.fdEventItem {
+	gap: 12px;
+	padding: 12px 14px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.fdEventItem:hover {
+	box-shadow: var(--shadow-card);
+	transform: translateX(2px);
+}
+
+.fdEventIcon {
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+	font-size: 15px;
+	border-radius: 999px;
+	flex-shrink: 0;
+}
+
+.fdEventIcon.fdEventTeal {
+	color: var(--teal);
+	background: var(--teal-light);
+}
+
+.fdEventIcon.fdEventInfo {
+	color: var(--info);
+	background: var(--info-bg);
+}
+
+.fdEventIcon.fdEventDanger {
+	color: var(--danger);
+	background: var(--danger-bg);
+}
+
+.fdEventContent {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.fdEventTitle {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--ink);
+}
+
+.fdEventSub {
+	margin-top: 2px;
+	font-size: 11.5px;
+	color: var(--ink-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.fdEventDate {
+	flex-shrink: 0;
+	padding: 3px 10px;
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--navy-800);
+	background: var(--slate-bg);
+	border-radius: 999px;
+}
+
+/* Bank allocation — proportional segmented bar + legend, no extra library needed */
+
+.fdAllocBar {
+	height: 16px;
+	margin: 8px 0 16px;
+	border-radius: 999px;
+	overflow: hidden;
+	background: var(--slate-bg);
+}
+
+.fdAllocSegment {
+	flex-basis: 0;
+	min-width: 2px;
+	height: 100%;
+}
+
+.fdAllocSegment + .fdAllocSegment {
+	border-left: 2px solid var(--surface);
+}
+
+/* Fixed flat-color palette shared by the allocation bar segments and the legend dots */
+.fdAllocBlue   { background: #2563EB; color: #2563EB; }
+.fdAllocGreen  { background: #10B981; color: #10B981; }
+.fdAllocOrange { background: #F97316; color: #F97316; }
+.fdAllocPurple { background: #8B5CF6; color: #8B5CF6; }
+.fdAllocTeal   { background: #0e7c86; color: #0e7c86; }
+.fdAllocGold   { background: #c8952b; color: #c8952b; }
+.fdAllocPink   { background: #EC4899; color: #EC4899; }
+
+.fdLegendList {
+	gap: 8px;
+	max-height: 190px;
+	overflow-y: auto;
+	padding-right: 2px;
+}
+
+.fdLegendList::-webkit-scrollbar {
+	width: 6px;
+}
+
+.fdLegendList::-webkit-scrollbar-thumb {
+	background: #c7d0dd;
+	border-radius: 8px;
+}
+
+.fdLegendRow {
+	padding: 6px 2px;
+	border-bottom: 1px solid var(--border-soft);
+}
+
+.fdLegendRow:last-child {
+	border-bottom: 0;
+}
+
+.fdLegendLabelBox {
+	gap: 8px;
+	min-width: 0;
+	flex: 1 1 auto;
+}
+
+.fdLegendDot {
+	font-size: 10px;
+	flex-shrink: 0;
+}
+
+.fdLegendBank {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: var(--ink);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.fdLegendValueBox {
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+.fdLegendAmount {
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--ink);
+	font-variant-numeric: tabular-nums;
+}
+
+.fdLegendPercent {
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--teal);
+	background: var(--teal-light);
+	padding: 2px 8px;
+	border-radius: 999px;
+}
+
+@media (max-width: 900px) {
+	.fdInsightCard {
+		flex: 1 1 100%;
+	}
+}
+
+.fdDataTable {
+	display: block;
+	max-height: 420px;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+.fdDataTable .sapMListTbl {
+	width: 100%;
+}
+
+.fdDataTable .sapMListTblHeader,
+.fdDataTable .sapMSTHead {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.fdDataTable::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.fdDataTable::-webkit-scrollbar-thumb {
+	background: #c7d0dd;
+	border-radius: 8px;
+}
+
+.fdDataTable::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.fdDataTable .sapMListTblHeaderCell {
+	padding: 9px 14px;
+	background: #f8fafc;
+	border-bottom: 1px solid var(--border);
+	border-top: 1px solid var(--border);
+}
+
+.fdDataTable .sapMListTblHeaderCell .sapMText {
+	font-size: 10.5px;
+	font-weight: 700;
+	color: var(--ink-faint);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.fdDataTable .sapMListTblCell {
+	padding: 11px 1px;
+	border-bottom: 1px solid var(--border-soft);
+	color: var(--ink);
+	font-size: 13px;
+	transition: background 0.12s ease;
+}
+
+/* zebra striping — helps scanning in dense financial tables */
+.fdDataTable .sapMListTblRow:nth-child(even) .sapMListTblCell {
+	background: rgba(16, 24, 40, 0.015);
+}
+
+/* row hover: tint + a left accent edge for a more tactile feel */
+.fdDataTable .sapMListTblRow {
+	position: relative;
+	border-left: 3px solid transparent;
+	transition: border-color 0.12s ease;
+}
+
+.fdDataTable .sapMLIBHoverable:hover {
+	border-left-color: var(--teal);
+}
+
+.fdDataTable .sapMLIBHoverable:hover .sapMListTblCell {
+	background: #f8fafc;
+}
+
+.fdDataTable .sapMObjectIdentifierTitle {
+	font-weight: 600;
+	font-family: 'IBM Plex Mono', Consolas, monospace;
+	font-size: 12.5px;
+	color: var(--navy-700);
+}
+
+/* ---------- Month End History table: extra breathing room ---------- */
+/* This table has 12 dense, mixed text/number/badge columns, so it needs
+   more generous padding and tighter numeric alignment than the shared
+   .fdDataTable default (which is tuned for shorter tables elsewhere). */
+
+.fdMonthEndTable .sapMListTbl {
+	table-layout: fixed;
+	width: auto;
+	min-width: 1530px;
+}
+
+.fdMonthEndTable .sapMListTblHeaderCell {
+	padding: 12px 16px;
+	white-space: nowrap;
+}
+
+.fdMonthEndTable .sapMListTblHeaderCell .sapMText {
+	white-space: nowrap;
+	overflow: visible;
+	font-size: 11px;
+}
+
+.fdMonthEndTable .sapMListTblCell {
+	padding: 14px 16px;
+	vertical-align: middle;
+}
+
+.fdMonthEndTable .sapMListTblCell .sapMText,
+.fdMonthEndTable .sapMListTblCell .sapMObjectNumberText,
+.fdMonthEndTable .sapMListTblCell .sapMLnk,
+.fdMonthEndTable .sapMListTblCell .sapMObjectIdentifierTitle {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+}
+
+.fdMonthEndTable .sapMListTblCell .sapMText,
+.fdMonthEndTable .sapMListTblCell .sapMObjectNumberText,
+.fdMonthEndTable .sapMListTblCell .sapMLnk {
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+/* Right-aligned numeric columns get tabular figures so the digits line
+   up vertically down the column instead of jittering per row. */
+.fdMonthEndTable .sapMListTblCell .sapMObjectNumberText,
+.fdMonthEndTable .fdMono {
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.01em;
+}
+
+.fdMonthEndTable .sapMObjectNumberText {
+	font-weight: 600;
+	color: var(--ink);
+}
+
+/* Accounting/Reverse document links: monospace, and visually muted until
+   hovered so 12 columns of mixed content don't all compete for attention. */
+.fdMonthEndTable .sapMLnk.fdMono {
+	font-family: 'IBM Plex Mono', Consolas, monospace;
+	font-size: 12.5px;
+	font-weight: 600;
+}
+
+.fdMonthEndTable .sapMObjectStatusText {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+/* Slightly taller rows read as calmer for a financial history table. */
+.fdMonthEndTable .sapMListTblRow {
+	min-height: 46px;
+}
+
+.fdTabs {
+	margin-bottom: 26px;
+}
+
+.fdTabs .sapMSegBBtn {
+	font-size: 12.5px;
+	font-weight: 600;
+}
+
+.fdTabs .sapMSegBBtnSel {
+	background: var(--navy-800);
+	border-color: var(--navy-800);
+	color: #ffffff;
+}
+
+/* ---------- Forms ---------- */
+
+.fdNarrowSection,
+.fdSettingsSection {
+	max-width: 780px;
+}
+
+.fdNarrowSection {
+	background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+	border-top: 3px solid var(--teal);
+}
+
+.fdNarrowSection .fdSectionHeader .sapMTitle {
+	color: var(--navy-700);
+}
+
+.fdFormGrid {
+	gap: 18px;
+}
+
+.fdFormGroup {
+	width: calc(50% - 9px);
+	min-width: 240px;
+	gap: 6px;
+}
+
+.fdFormGroup .sapMLabel {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--ink-muted);
+}
+
+.fdFormBlock {
+	margin-bottom: 22px;
+	padding-bottom: 22px;
+	border-bottom: 1px solid var(--border-soft);
+}
+
+.fdFormBlock:last-of-type {
+	border-bottom: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.fdFormBlockTitle {
+	display: block;
+	margin-bottom: 14px;
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--navy-700);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.fdCreateSection {
+	max-width: 900px;
+}
+
+.fdCreateFormBody {
+	margin-top: 4px;
+}
+
+.fdCreateRow {
+	gap: 14px;
+	margin-top: 18px;
+	padding-top: 18px;
+	border-top: 1px solid var(--border-soft);
+}
+
+.fdFormMessage {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: var(--success);
+}
+
+/* ---------- Calculator result ---------- */
+
+.fdCalcResult {
+	gap: 24px;
+	margin-top: 18px;
+	padding: 18px 20px;
+	background: var(--teal-light);
+	border: 1px solid rgba(14, 124, 134, 0.18);
+	border-radius: var(--radius-md);
+	flex-wrap: wrap;
+}
+
+.fdCalcResult > .sapMVBox {
+	min-width: 150px;
+	flex: 1 1 150px;
+	padding: 0 20px 0 0;
+	border-right: 1px solid rgba(14, 124, 134, 0.16);
+}
+
+.fdCalcResult > .sapMVBox:last-child {
+	border-right: 0;
+	padding-right: 0;
+}
+
+.fdCalcValue {
+	margin-top: 5px;
+	font-size: 18px;
+	font-weight: 800;
+	color: var(--navy-800);
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Alerts ---------- */
+
+.fdAlertItem {
+	gap: 14px;
+	margin-bottom: 10px;
+	padding: 14px 16px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-left: 3px solid var(--gold);
+	border-radius: var(--radius-md);
+	transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.fdAlertItem:hover {
+	box-shadow: var(--shadow-card);
+	transform: translateX(2px);
+}
+
+.fdAlertIcon {
+	width: 34px;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	font-size: 17px;
+	color: var(--gold);
+	background: #fbf1de;
+	border-radius: 999px;
+	flex-shrink: 0;
+}
+
+.fdAlertContent {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.fdAlertTitle {
+	font-size: 13.5px;
+	font-weight: 600;
+	color: var(--ink);
+}
+
+.fdAlertSub {
+	margin-top: 2px;
+	font-size: 12px;
+	color: var(--ink-muted);
+}
+
+/* ---------- Settings toggles ---------- */
+
+.fdToggleRow {
+	padding: 13px 0;
+	border-bottom: 1px solid var(--border-soft);
+}
+
+.fdToggleRow:last-child {
+	border-bottom: 0;
+}
+
+.fdToggleRow .sapMText:first-child,
+.fdToggleRow > .sapMVBox > .sapMText:first-child {
+	font-size: 13.5px;
+	font-weight: 600;
+	color: var(--ink);
+}
+
+/* ---------- Misc ---------- */
+
+.fdMono {
+	font-family: 'IBM Plex Mono', Consolas, monospace;
+	font-size: 12px;
+	color: var(--ink-muted);
+}
+
+/* ---------- Status pills (override SAPUI5 ObjectStatus) ---------- */
+
+.sapMObjStatus {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 3px 10px;
+	border-radius: 999px;
+	font-size: 11.5px;
+	font-weight: 600;
+}
+
+.sapMObjectStatusSuccess {
+	background: var(--success-bg);
+	box-shadow: inset 0 0 0 1px rgba(6, 122, 70, 0.16);
+}
+.sapMObjectStatusSuccess .sapMObjStatusText,
+.sapMObjectStatusSuccess .sapMObjStatusIcon {
+	color: var(--success);
+}
+
+.sapMObjectStatusWarning {
+	background: var(--warning-bg);
+	box-shadow: inset 0 0 0 1px rgba(181, 71, 8, 0.16);
+}
+.sapMObjectStatusWarning .sapMObjStatusText,
+.sapMObjectStatusWarning .sapMObjStatusIcon {
+	color: var(--warning);
+}
+
+.sapMObjectStatusError {
+	background: var(--danger-bg);
+	box-shadow: inset 0 0 0 1px rgba(180, 35, 24, 0.16);
+}
+.sapMObjectStatusError .sapMObjStatusText,
+.sapMObjectStatusError .sapMObjStatusIcon {
+	color: var(--danger);
+}
+
+.sapMObjectStatusInformation {
+	background: var(--info-bg);
+	box-shadow: inset 0 0 0 1px rgba(23, 92, 211, 0.16);
+}
+.sapMObjectStatusInformation .sapMObjStatusText,
+.sapMObjectStatusInformation .sapMObjStatusIcon {
+	color: var(--info);
+}
+
+/* ---------- Focus visibility (accessibility) ---------- */
+
+.fdShell button:focus,
+.fdShell input:focus {
+	outline: 2px solid var(--teal) !important;
+	outline-offset: 1px;
+}
+
+.fdShell button:focus:not(:focus-visible),
+.fdShell input:focus:not(:focus-visible) {
+	outline: 2px solid var(--teal) !important;
+}
+
+.fdShell button:focus-visible,
+.fdShell input:focus-visible,
+.fdShell .sapMBtn:focus::before {
+	outline: 2px solid var(--teal) !important;
+	outline-offset: 1px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+	.fdAppFrame {
+		min-height: 100vh;
+		overflow: auto;
+	}
+
+	.fdSidebar {
+		width: 180px;
+		flex-basis: 180px;
+	}
+
+	.fdContent {
+		padding: 20px;
+	}
+
+	.fdMetricCard {
+		min-width: 170px;
+	}
+}
+
+@media (max-width: 700px) {
+	.fdAppFrame {
+		display: block;
+	}
+
+	.fdSidebar {
+		width: 100%;
+		height: auto;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 10px;
+		border-right: 0;
+		border-bottom: 1px solid var(--navy-900);
+	}
+
+	.fdSidebar::after {
+		display: none;
+	}
+
+	.fdSidebarSpacer {
+		display: none;
+	}
+
+	.fdSidebarUser {
+		width: 100%;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.fdLogo {
+		width: 100%;
+		border-bottom: 0;
+		padding-bottom: 10px;
+	}
+
+	.fdNavSection {
+		display: none;
+	}
+
+	.fdNavButton.sapMBtn {
+		width: 50%;
+	}
+
+	.fdTopbar.sapMTB {
+		padding: 0 14px;
+	}
+
+	.fdFormGroup {
+		width: 100%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fdMetricCard,
+	.fdAlertItem,
+	.fdNavButton .sapMBtnInner,
+	.sapMBtnEmphasized .sapMBtnInner,
+	.fdPageSection,
+	.fdAlertNav .sapMBtnIcon {
+		animation: none !important;
+		transition: none !important;
+		opacity: 1 !important;
+	}
+}
+
+/* ============================================================
+   Horizon Dashboard Styles
+   ============================================================ */
+
+.horizonDashboardPage {
+	background-color: #F4F7F9; /* Light gray Horizon background */
+}
+
+.horizonSection {
+	padding: 12px;
+}
+
+.horizonMetricGrid {
+	margin-bottom: 12px;
+	gap: 8px;
+}
+
+.horizonCard {
+	background-color: #ffffff;
+	border-radius: 6px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	padding: 12px;
+	flex: 1;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	border-left: 4px solid transparent;
+}
+
+.horizonCard:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.horizonCard.blue { border-left-color: #0070F2; }
+.horizonCard.green { border-left-color: #107E3E; }
+.horizonCard.purple { border-left-color: #6136B3; }
+.horizonCard.teal { border-left-color: #0A6ED1; }
+.horizonCard.orange { border-left-color: #E9730C; }
+
+.horizonIcon {
+	font-size: 1.25rem;
+	color: #32363A;
+	background: #F4F7F9;
+	padding: 8px;
+	border-radius: 6px;
+}
+
+.horizonCard.blue .horizonIcon { color: #0070F2; background: rgba(0, 112, 242, 0.1); }
+.horizonCard.green .horizonIcon { color: #107E3E; background: rgba(16, 126, 62, 0.1); }
+.horizonCard.purple .horizonIcon { color: #6136B3; background: rgba(97, 54, 179, 0.1); }
+.horizonCard.teal .horizonIcon { color: #0A6ED1; background: rgba(10, 110, 209, 0.1); }
+.horizonCard.orange .horizonIcon { color: #E9730C; background: rgba(233, 115, 12, 0.1); }
+
+.horizonGrid {
+	margin-bottom: 12px;
+}
+.horizonChartCard {
+    background-color: #cde0e0;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    padding: 12px;
+    height: 100%;.horizonChartCard {
+	background-color: #ffffff;
+	border-radius: 6px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+	padding: 12px;
+	height: 100%;
+}
+
+.horizonHeader {
+	border-bottom: 1px solid #E3E8EF;
+	margin-bottom: 10px;
+	padding-bottom: 6px;
+}
+
+/* Timeline */
+.horizonTimeline {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.horizonTimelineItem {
+	padding: 12px;
+	background: #F9FAFB;
+	border-radius: 8px;
+	border-left: 4px solid #0070F2;
+}
+
+.horizonTimelineIcon {
+	font-size: 1.5rem;
+	margin-right: 12px;
+}
+
+.horizonTimelineTitle {
+	font-weight: 600;
+	color: #111928;
+}
+
+.horizonTimelineSub {
+	font-size: 0.85rem;
+	color: #6B7280;
+}
+
+.horizonTimelineDate {
+	font-weight: bold;
+	color: #0070F2;
+}
+
+/* Ranking List */
+.horizonRankingList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.horizonRankingItem {
+	padding: 4px;
+	background: #ffffff;
+	border: 1px solid #E3E8EF;
+	border-radius: 8px;
+	transition: background 0.2s;
+}
+
+.horizonRankingItem:hover {
+	background: #F4F7F9;
+}
+
+.horizonRankingIcon {
+	font-size: 1.5rem;
+	color: #6136B3;
+	margin-right: 12px;
+}
+
+.horizonRankingBank {
+	font-weight: bold;
+	font-size: 1.1rem;
+	color: #111928;
+}
+
+.horizonRankingRate {
+	font-weight: bold;
+	font-size: 1.2rem;
+	color: #107E3E;
+}
+
+/* Quick Actions Section */
+.quickActionsSection {
+	background-color: #ffffff;
+	border-radius: 12px;
+	padding: 24px;
+}
+
+.quickActionCard {
+	background-color: #F9FAFB;
+	border: 1px solid #E3E8EF;
+	border-radius: 12px;
+	padding: 24px;
+	text-align: center;
+	align-items: center;
+	transition: all 0.2s ease;
+	cursor: pointer;
+}
+
+.quickActionCard:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	border-color: #0070F2;
+	transform: translateY(-2px);
+}
+
+.qaIcon {
+	font-size: 2.5rem;
+	margin-bottom: 12px;
+}
+
+.qaIcon.blue { color: #0070F2; }
+.qaIcon.green { color: #107E3E; }
+.qaIcon.purple { color: #6136B3; }
+.qaIcon.orange { color: #E9730C; }
+
+.qaTitle {
+	font-weight: bold;
+	font-size: 1.1rem;
+	color: #111928;
+	margin-bottom: 16px;
+}
+
+.qaBtn {
+	width: 100%;
+}

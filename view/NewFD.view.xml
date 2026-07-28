@@ -1,0 +1,127 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.NewFD"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:form="sap.ui.layout.form"
+	xmlns="sap.m"
+	displayBlock="true">
+
+	<Page
+		title="Create Fixed Deposit"
+		showHeader="false"
+		enableScrolling="true"
+		class="fdContentPage horizonDashboardPage">
+
+		<content>
+			<VBox class="fdCreatePage fdPageSection horizonSection">
+
+				<VBox class="fdSectionCard horizonChartCard fdCreateSection">
+					<Toolbar class="fdSectionHeader horizonHeader">
+						<Title text="Deposit Details" level="H3"/>
+					</Toolbar>
+
+					<form:SimpleForm
+						layout="ResponsiveGridLayout"
+						labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+						adjustLabelSpan="false"
+						emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
+						columnsXL="2" columnsL="2" columnsM="1"
+						singleContainerFullSize="false">
+						<form:content>
+							<core:Title text="General Information" />
+							<Label text="Company Code" required="true"/>
+							<Input value="{newFd>/coCode}" placeholder="1000" showValueHelp="true" valueHelpRequest=".onCompanyCodeValueHelp"/>
+
+							<Label text="Bank" required="true"/>
+							<Input value="{newFd>/bank}" placeholder="Bank name" showValueHelp="true" valueHelpRequest=".onBankNameValueHelp"/>
+
+							<Label text="FD Number" required="true"/>
+							<Input value="{newFd>/id}" placeholder="00001"/>
+
+							<Label text="Purpose of FD" required="true"/>
+							<Input value="{newFd>/openingFd}" placeholder="Purpose" showValueHelp="true" valueHelpRequest=".onOpeningFdValueHelp"/>
+
+							<core:Title text="Terms" />
+							<Label text="Principal Amount" required="true"/>
+							<Input value="{newFd>/principal}" type="Number" placeholder="100000"/>
+
+							<Label text="Annual Rate (%)" required="true"/>
+							<Input value="{newFd>/rate}" type="Number" placeholder="7.5"/>
+
+							<Label text="Start Date" required="true"/>
+							<DatePicker id="dpStartDate" value="{newFd>/start}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy"/>
+
+							<Label text="Creation Date" required="true"/>
+							<DatePicker value="{newFd>/createDate}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy" editable="false"/>
+
+							<Label text="Tenor (Months)" required="true"/>
+							<Input value="{newFd>/tenor}" type="Number" placeholder="12"/>
+
+							<Label text="Compounding" required="true"/>
+							<Select selectedKey="{newFd>/freq}" width="100%">
+								<items>
+									<core:Item key="12" text="Monthly"/>
+									<core:Item key="4" text="Quarterly"/>
+									<core:Item key="2" text="Half-yearly"/>
+									<core:Item key="1" text="Yearly"/>
+								</items>
+							</Select>
+						</form:content>
+					</form:SimpleForm>
+				</VBox>
+
+				<VBox class="fdSectionCard horizonChartCard fdCreateSection">
+					<Toolbar class="fdSectionHeader horizonHeader">
+						<Title text="Accounting &amp; Renewal Options" level="H3"/>
+					</Toolbar>
+
+					<form:SimpleForm
+						layout="ResponsiveGridLayout"
+						labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+						adjustLabelSpan="false"
+						emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
+						columnsXL="2" columnsL="2" columnsM="1"
+						singleContainerFullSize="false">
+						<form:content>
+							<core:Title text="Accounting Assignment" />
+							<Label text="FD Principal GL" required="true"/>
+							<Input value="{newFd>/glP}" placeholder="110000" showValueHelp="true" valueHelpRequest=".onGlPrincipalValueHelp"/>
+
+							<Label text="Bank GL" required="true"/>
+							<Input value="{newFd>/bankGL}" placeholder="100100" showValueHelp="true" enabled="false" valueHelpRequest=".onBankGlValueHelp"/>
+
+							<Label text="Interest Receivable GL" required="true"/>
+							<Input value="{newFd>/glI}" placeholder="120000" showValueHelp="true" valueHelpRequest=".onGlReceivableValueHelp"/>
+
+							<Label text="Interest Income GL" required="true"/>
+							<Input value="{newFd>/glInc}" placeholder="410000" showValueHelp="true" valueHelpRequest=".onGlIncomeValueHelp"/>
+
+							<Label text="Profit Center" required="true"/>
+							<Input value="{newFd>/profitCenter}" placeholder="PC100" showValueHelp="true" valueHelpRequest=".onProfitCenterValueHelp"/>
+							
+							<Label text="Generated Document"/>
+							<Input value="{newFd>/fdDocNo}" editable="false"/>
+
+							<core:Title text="Renewal Options" />
+							<Label text="Auto-renewal on maturity"/>
+							<CheckBox selected="{newFd>/autoRenew}" text="Automatically renew FD"/>
+
+							<Label text="Include interest"/>
+							<CheckBox selected="{newFd>/rollInterest}" text="Compound maturity value"/>
+						</form:content>
+					</form:SimpleForm>
+				</VBox>
+
+			</VBox>
+		</content>
+
+		<footer>
+			<Toolbar>
+				<Text text="{newFd>/message}" class="fdFormMessage"/>
+				<ToolbarSpacer/>
+				<Button text="Create FD &amp; Generate Accounting Document" type="Emphasized" press=".onCreateFD" class="fdCreateButton"/>
+			</Toolbar>
+		</footer>
+
+	</Page>
+</mvc:View>

@@ -1,0 +1,118 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.InterestAccrual"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:suite="sap.suite.ui.microchart"
+	xmlns="sap.m"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+		<content>
+			<VBox class="fdPageSection horizonSection">
+												<VBox class="fdSectionCard horizonChartCard fdNarrowSection">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<Title text="Compound interest calculator" level="H3"/>
+													</Toolbar>
+													<FlexBox wrap="Wrap" class="fdFormGrid">
+														<VBox class="fdFormGroup">
+															<Label text="Principal amount (INR)"/>
+															<Input value="{calc>/principal}" type="Number"/>
+														</VBox>
+														<VBox class="fdFormGroup">
+															<Label text="Annual interest rate (%)"/>
+															<Input value="{calc>/rate}" type="Number"/>
+														</VBox>
+														<VBox class="fdFormGroup">
+															<Label text="Tenor (months)"/>
+															<Input value="{calc>/tenor}" type="Number"/>
+														</VBox>
+														<VBox class="fdFormGroup">
+															<Label text="Compounding frequency"/>
+															<Select selectedKey="{calc>/freq}">
+																<items>
+																	<core:Item key="12" text="Monthly"/>
+																	<core:Item key="4" text="Quarterly"/>
+																	<core:Item key="2" text="Half-yearly"/>
+																	<core:Item key="1" text="Yearly"/>
+																</items>
+															</Select>
+														</VBox>
+													</FlexBox>
+													<Button text="Calculate" icon="sap-icon://simulate" type="Emphasized" press=".onCalculateInterest" class="fdActionButton"/>
+													<HBox class="fdCalcResult">
+														<VBox>
+															<Text text="Maturity value" class="fdMetricLabel"/>
+															<Text text="{calc>/maturityValueText}" class="fdCalcValue"/>
+														</VBox>
+														<VBox>
+															<Text text="Total interest" class="fdMetricLabel"/>
+															<Text text="{calc>/interestText}" class="fdCalcValue"/>
+														</VBox>
+														<VBox>
+															<Text text="Monthly accrual" class="fdMetricLabel"/>
+															<Text text="{calc>/monthlyText}" class="fdCalcValue"/>
+														</VBox>
+													</HBox>
+												</VBox>
+												<VBox class="fdSectionCard horizonChartCard">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<core:Icon src="sap-icon://calendar-2" class="fdMetricIcon fdMetricIconTeal"/>
+														<Title text="Day-wise interest accrual" level="H3"/>
+													</Toolbar>
+													<Table growing="true" growingThreshold="50" growingScrollToLoad="true" items="{/interestSchedule}" class="fdDataTable">
+														<columns>
+															<Column><Text text="FD number"/></Column>
+															<Column><Text text="Principal"/></Column>
+															<Column><Text text="Rate %"/></Column>
+															<Column><Text text="Accrued days"/></Column>
+															<Column><Text text="Daily accrual"/></Column>
+															<Column><Text text="Interest accrued"/></Column>
+															<Column><Text text="Accrual period"/></Column>
+															<Column><Text text="Status"/></Column>
+														</columns>
+														<items>
+															<ColumnListItem>
+																<cells>
+																	<Text text="{id}"/>
+																	<Text text="{principalText}"/>
+																	<Text text="{rateText}"/>
+																	<Text text="{accruedDaysText}"/>
+																	<Text text="{dailyAccrualText}"/>
+																	<Text text="{currentMonthAccrualText}"/>
+																	<Text text="{accrualPeriodText}"/>
+																	<ObjectStatus text="Calculated" state="Success"/>
+																</cells>
+															</ColumnListItem>
+														</items>
+													</Table>
+												</VBox>
+												<VBox class="fdSectionCard horizonChartCard">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<Title text="Accrual and reversal log" level="H3"/>
+													</Toolbar>
+													<Table growing="true" growingThreshold="50" growingScrollToLoad="true" items="{/accrualEntries}" class="fdDataTable">
+														<columns>
+															<Column><Text text="Date"/></Column>
+															<Column><Text text="FD Number"/></Column>
+															<Column><Text text="DR:Interest receivable"/></Column>
+															<Column><Text text="CR:Interest income"/></Column>
+															<Column><Text text="Type"/></Column>
+															<Column><Text text="Document no."/></Column>
+														</columns>
+														<items>
+															<ColumnListItem>
+																<cells>
+																	<Text text="{dateText}"/>
+																	<Text text="{fd}"/>
+																	<Text text="{drAmountText}"/>
+																	<Text text="{crAmountText}"/>
+																	<ObjectStatus text="{type}" state="{entryState}"/>
+																	<Text text="{doc}" class="fdMono"/>
+																</cells>
+															</ColumnListItem>
+														</items>
+													</Table>
+												</VBox>
+											</VBox>
+		</content>
+	</Page>
+</mvc:View>

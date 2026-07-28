@@ -1,0 +1,126 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.App"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	displayBlock="true">
+	<App class="fdShell">
+		<pages>
+			<Page showHeader="false" class="fdPage">
+				<dependents>
+					<ResponsivePopover id="calcPopover" title="Inclusive Interest Calculator" placement="Bottom" contentWidth="350px">
+						<content>
+							<VBox class="sapUiSmallMargin">
+								<FlexBox wrap="Wrap" class="fdFormGrid">
+									<VBox class="fdFormGroup sapUiSmallMarginBottom">
+										<Label text="Principal amount (INR)"/>
+										<Input value="{calc>/principal}" type="Number"/>
+									</VBox>
+									<VBox class="fdFormGroup sapUiSmallMarginBottom">
+										<Label text="Annual interest rate (%)"/>
+										<Input value="{calc>/rate}" type="Number"/>
+									</VBox>
+									<VBox class="fdFormGroup sapUiSmallMarginBottom">
+										<Label text="Start Date"/>
+										<DatePicker value="{calc>/startDate}" valueFormat="yyyy-MM-dd" displayFormat="MMM dd, yyyy"/>
+									</VBox>
+									<VBox class="fdFormGroup sapUiSmallMarginBottom">
+										<Label text="Maturity Date"/>
+										<DatePicker value="{calc>/maturityDate}" valueFormat="yyyy-MM-dd" displayFormat="MMM dd, yyyy"/>
+									</VBox>
+								</FlexBox>
+								<Button text="Calculate" icon="sap-icon://simulate" type="Emphasized" press=".onCalculateInterest" class="fdActionButton sapUiSmallMarginBottom"/>
+								<HBox class="fdCalcResult">
+									<VBox class="sapUiSmallMarginEnd">
+										<Text text="Maturity value" class="fdMetricLabel"/>
+										<Text text="{calc>/maturityValueText}" class="fdCalcValue"/>
+									</VBox>
+									<VBox class="sapUiSmallMarginEnd">
+										<Text text="Total interest" class="fdMetricLabel"/>
+										<Text text="{calc>/interestText}" class="fdCalcValue"/>
+									</VBox>
+								</HBox>
+							</VBox>
+						</content>
+					</ResponsivePopover>
+					<ActionSheet id="quickActionsMenu" title="Quick Actions" placement="Bottom">
+						<buttons>
+							<Button text="Active Fixed Deposits" icon="sap-icon://table-view" press=".onNavFds"/>
+							<Button text="Day-wise Interest Accrual" icon="sap-icon://table-view" press=".onNavInterest"/>
+							<Button text="Month End Data" icon="sap-icon://synchronize" press=".onNavMonthEnd"/>
+							<Button text="Maturity" icon="sap-icon://flag" press=".onNavMaturity"/>
+						</buttons>
+					</ActionSheet>
+					<ResponsivePopover id="notificationPopover" title="Notifications" placement="Bottom" contentWidth="400px">
+						<content>
+							<VBox class="sapUiSmallMargin">
+								<VBox items="{/alerts}">
+									<items>
+										<HBox class="fdAlertItem" alignItems="Center">
+											<core:Icon src="{icon}" class="fdAlertIcon"/>
+											<VBox class="fdAlertContent">
+												<Text text="{title}" class="fdAlertTitle"/>
+												<Text text="{subtitle}" class="fdAlertSub"/>
+											</VBox>
+											<Button text="{actionText}" press=".onOpenAlertMaturity" class="fdSmallButton" visible="{= ${fdId} !== '' }"/>
+										</HBox>
+									</items>
+								</VBox>
+							</VBox>
+						</content>
+					</ResponsivePopover>
+				</dependents>
+				<content>
+					<HBox class="fdAppFrame">
+						<VBox class="fdSidebar">
+							<VBox class="fdLogo">
+								<HBox alignItems="Center" class="fdLogoTitle">
+									<core:Icon src="sap-icon://capital-projects" class="fdLogoIcon"/>
+									<Text text="FD Manager"/>
+								</HBox>
+								<Text text="SAP Treasury Module" class="fdLogoSub"/>
+							</VBox>
+
+							<Text text="Overview" class="fdNavSection"/>
+							<Button text="Dashboard" icon="sap-icon://business-objects-experience" type="{ui>/nav/dashboard}" press=".onNavDashboard" class="fdNavButton"/>
+							<Button text="Fixed Deposits" icon="sap-icon://money-bills" type="{ui>/nav/fds}" press=".onNavFds" class="fdNavButton"/>
+
+							<Text text="Processing" class="fdNavSection"/>
+							<Button text="Interest Accrual" icon="sap-icon://simulate" type="{ui>/nav/interest}" press=".onNavInterest" class="fdNavButton"/>
+							<Button text="Maturity Processing" icon="sap-icon://action" type="{ui>/nav/maturity}" press=".onNavMaturity" class="fdNavButton"/>
+							<Button text="Maturity Alerts" icon="sap-icon://high-priority" type="{ui>/nav/maturityAlerts}" press=".onNavMaturityAlerts" class="fdNavButton fdAlertNav"/>
+							<Button text="Accounting Entries" icon="sap-icon://accounting-document-verification" type="{ui>/nav/accounting}" press=".onNavAccounting" class="fdNavButton"/>
+							<Button text="Month End Activity" icon="sap-icon://process" type="{ui>/nav/monthEnd}" press=".onNavMonthEnd" class="fdNavButton"/>
+
+							<Text text="Setup" class="fdNavSection"/>
+							<Button text="New FD" icon="sap-icon://add" type="{ui>/nav/newfd}" press=".onNavNewfd" class="fdNavButton"/>
+							<Button text="Legacy FD" icon="sap-icon://accounting-document-verification" type="{ui>/nav/legacyfd}" press=".onNavLegacyFd" class="fdNavButton"/>
+							<Button text="Settings" icon="sap-icon://action-settings" type="{ui>/nav/settings}" press=".onNavSettings" class="fdNavButton"/>
+
+							<VBox class="fdSidebarSpacer"/>
+							<HBox alignItems="Center" class="fdSidebarUser">
+								<core:Icon src="sap-icon://person-placeholder" class="fdUserAvatar"/>
+								<VBox class="fdUserInfo">
+									<Text text="{/user/name}" class="fdUserName"/>
+									<Text text="Treasury Operations" class="fdUserSub"/>
+								</VBox>
+							</HBox>
+						</VBox>
+
+						<VBox class="fdMain">
+							<Toolbar class="fdTopbar">
+								<Title text="{ui>/title}" level="H2" class="fdPageTitle"/>
+								<ToolbarSpacer/>
+								<Button icon="sap-icon://calculator" press=".onToggleCalculator" tooltip="Compound Interest Calculator" class="fdTopBarIconBtn"/>
+								<Button icon="sap-icon://bell" text="{= ${/metrics/maturingThisMonth} > 0 ? ${/metrics/maturingThisMonth} : '' }" press=".onToggleNotifications" tooltip="Notifications" class="fdTopBarIconBtn fdNotificationBtn"/>
+								<Text text="Period: {ui>/fiscalYearText}" class="fdPeriodText"/>
+								<Button icon="sap-icon://action" press=".onToggleQuickActions" tooltip="Quick Actions" class="fdTopBarIconBtn"/>
+							</Toolbar>
+							<NavContainer id="contentNav" class="fdContent"/>
+						</VBox>
+					</HBox>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

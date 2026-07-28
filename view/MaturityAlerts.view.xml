@@ -1,0 +1,60 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.MaturityAlerts"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:suite="sap.suite.ui.microchart"
+	xmlns="sap.m"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+		<content>
+			<VBox class="fdPageSection horizonSection">
+												<VBox class="fdSectionCard horizonChartCard">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<Title text="Maturity alerts" level="H3"/>
+													</Toolbar>
+													<VBox items="{/alerts}">
+														<items>
+															<HBox class="fdAlertItem" alignItems="Center">
+																<core:Icon src="{icon}" class="fdAlertIcon"/>
+																<VBox class="fdAlertContent">
+																	<Text text="{title}" class="fdAlertTitle"/>
+																	<Text text="{subtitle}" class="fdAlertSub"/>
+																</VBox>
+																<Button text="{actionText}" press=".onOpenAlertMaturity" class="fdSmallButton"/>
+															</HBox>
+														</items>
+													</VBox>
+												</VBox>
+												<VBox class="fdSectionCard horizonChartCard">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<Title text="Maturity action queue" level="H3"/>
+													</Toolbar>
+													<Table growing="true" growingThreshold="50" growingScrollToLoad="true" items="{/fds}" class="fdDataTable">
+														<columns>
+															<Column><Text text="FD number"/></Column>
+															<Column><Text text="Bank"/></Column>
+															<Column><Text text="Principal Amount"/></Column>
+															<Column><Text text="Maturity value"/></Column>
+															<Column><Text text="Maturity date"/></Column>
+															<Column><Text text="Status"/></Column>
+															<Column><Text text="Action"/></Column>
+														</columns>
+														<items>
+															<ColumnListItem>
+																<cells>
+																	<ObjectIdentifier title="{id}"/>
+																	<Text text="{bank}"/>
+																	<Text text="{principalText}"/>
+																	<Text text="{maturityValueText}"/>
+																	<Text text="{maturityText}"/>
+																	<ObjectStatus text="{statusText}" state="{statusState}"/>
+																	<Button text="{actionLabel}" icon="{actionIcon}" enabled="{actionEnabled}" press=".onOpenMaturity" class="fdSmallButton"/>
+																</cells>
+															</ColumnListItem>
+														</items>
+													</Table>
+												</VBox>
+											</VBox>
+		</content>
+	</Page>
+</mvc:View>

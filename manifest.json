@@ -1,0 +1,201 @@
+{
+    "_version": "1.7.0",
+    "sap.app": {
+        "id": "com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "sourceTemplate": {
+            "id": "servicecatalog.connectivityComponent",
+            "version": "0.0.0"
+        },
+        "dataSources": {
+            "ZFI_FIXED_DEPOSIT_SRV": {
+                "uri": "/sap/opu/odata/sap/ZFI_FIXED_DEPOSIT_SRV/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        },
+        "supportedThemes": [
+            "sap_hcb",
+            "sap_belize"
+        ]
+    },
+    "sap.ui5": {
+        "rootView": {
+            "viewName": "com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.view.App",
+            "type": "XML",
+            "id": "app"
+        },
+        "dependencies": {
+            "minUI5Version": "1.30.0",
+            "libs": {
+                "sap.collaboration": {},
+                "sap.m": {},
+                "sap.ui.comp": {},
+                "sap.ui.core": {},
+                "sap.ui.layout": {},
+                "sap.ushell": {},
+                "sap.uxap": {},
+                "sap.viz": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "": {
+                "dataSource": "ZFI_FIXED_DEPOSIT_SRV",
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "useBatch": false
+                }
+            },
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.i18n.i18n"
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.view",
+                "controlId": "contentNav",
+                "controlAggregation": "pages",
+                "transition": "show"
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "dashboard",
+                    "target": "dashboard"
+                },
+                {
+                    "pattern": "fixed-deposits",
+                    "name": "fixedDeposits",
+                    "target": "fixedDeposits"
+                },
+                {
+                    "pattern": "interest-accrual",
+                    "name": "interestAccrual",
+                    "target": "interestAccrual"
+                },
+                {
+                    "pattern": "maturity-alerts",
+                    "name": "maturityAlerts",
+                    "target": "maturityAlerts"
+                },
+                {
+                    "pattern": "accounting-entries",
+                    "name": "accountingEntries",
+                    "target": "accountingEntries"
+                },
+                {
+                    "pattern": "maturity",
+                    "name": "maturity",
+                    "target": "maturity"
+                },
+                {
+                    "pattern": "maturity-history",
+                    "name": "maturityHistory",
+                    "target": "maturityHistory"
+                },
+                {
+                    "pattern": "month-end",
+                    "name": "monthEnd",
+                    "target": "monthEnd"
+                },
+                {
+                    "pattern": "new-fd",
+                    "name": "newFD",
+                    "target": "newFD"
+                },
+                {
+                    "pattern": "legacy-fd",
+                    "name": "legacyFD",
+                    "target": "legacyFD"
+                },
+                {
+                    "pattern": "settings",
+                    "name": "settings",
+                    "target": "settings"
+                }
+            ],
+            "targets": {
+                "dashboard": {
+                    "viewName": "Dashboard"
+                },
+                "fixedDeposits": {
+                    "viewName": "FixedDeposits"
+                },
+                "interestAccrual": {
+                    "viewName": "InterestAccrual"
+                },
+                "maturityAlerts": {
+                    "viewName": "MaturityAlerts"
+                },
+                "accountingEntries": {
+                    "viewName": "AccountingEntries"
+                },
+                "newFD": {
+                    "viewName": "NewFD"
+                },
+                "legacyFD": {
+                    "viewName": "LegacyFD"
+                },
+                "maturity": {
+                    "viewName": "Maturity"
+                },
+                "settings": {
+                    "viewName": "Settings"
+                },
+                "monthEnd": {
+                    "viewName": "MonthEnd"
+                },
+                "maturityHistory": {
+                    "viewName": "MaturityHistory"
+                }
+            }
+        }
+    },
+    "sap.platform.abap": {
+        "uri": "/sap/bc/ui5_ui5/sap/zfi_fixed_depo",
+        "_version": "1.1.0"
+    }
+}

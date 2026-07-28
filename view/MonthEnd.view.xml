@@ -1,0 +1,186 @@
+<mvc:View
+    controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.MonthEnd"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        showHeader="false"
+        class="fdContentPage horizonDashboardPage">
+
+        <content>
+
+            <VBox class="fdPageSection horizonSection">
+
+                <VBox class="fdSectionCard horizonChartCard">
+
+                    <Toolbar class="fdSectionHeader horizonHeader">
+
+                        <core:Icon
+                            src="sap-icon://history"
+                            class="fdMetricIcon fdMetricIconTeal"/>
+
+                        <Title
+                            text="Month End History"
+                            level="H3"/>
+
+                        <ToolbarSpacer/>
+
+                        <SearchField
+                            width="18rem"
+                            placeholder="Search FD, Bank, Accounting Document..."
+                            liveChange=".onMonthEndSearch"/>
+
+                        <Button
+                            icon="sap-icon://sort"
+                            tooltip="Sort"
+                            type="Transparent"
+                            press=".onMonthEndSort"/>
+
+                        <Button
+                            icon="sap-icon://filter"
+                            tooltip="Filter"
+                            type="Transparent"
+                            press=".onMonthEndFilter"/>
+
+                        <Button
+                            icon="sap-icon://excel-attachment"
+                            tooltip="Export"
+                            type="Transparent"
+                            press=".onExportMonthEnd"/>
+
+                        <Button
+                            icon="sap-icon://refresh"
+                            text="Refresh"
+                            type="Transparent"
+                            press=".onRefreshMonthEnd"/>
+
+                    </Toolbar>
+
+                    <Table
+                        id="monthEndHistoryTable"
+                        growing="true"
+                        growingThreshold="50"
+                        sticky="ColumnHeaders"
+                        items="{/monthEndHistory}"
+                        class="fdDataTable fdMonthEndTable">
+
+                        <columns>
+
+                            <Column width="120px">
+                                <Text text="Company Code"/>
+                            </Column>
+
+                            <Column width="100px">
+                                <Text text="FD Number"/>
+                            </Column>
+
+                            <Column width="150px">
+                                <Text text="Bank"/>
+                            </Column>
+
+                            <Column width="120px" hAlign="End">
+                                <Text text="Principal"/>
+                            </Column>
+                            <Column width="110px" hAlign="End">
+                                <Text text="Interest Rate"/>
+                            </Column>
+                            <Column width="140px" hAlign="End">
+                                <Text text="Interest Amount"/>
+                            </Column>
+
+                            <Column width="160px">
+                                <Text text="Accounting Document"/>
+                            </Column>
+
+                            <Column width="150px">
+                                <Text text="Reverse Document"/>
+                            </Column>
+
+                            <Column width="120px">
+                                <Text text="Posting Date"/>
+                            </Column>
+
+                            <Column width="130px" hAlign="Center">
+                                <Text text="Month End For"/>
+                            </Column>
+
+                            <Column width="120px" hAlign="Center">
+                                <Text text="Processed By"/>
+                            </Column>
+
+                            <Column width="110px" hAlign="Center">
+                                <Text text="Status"/>
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem>
+
+                                <cells>
+
+                                    <Text text="{coCode}" class="fdMono"/>
+
+                                    <ObjectIdentifier
+                                        title="{fdAccno}"/>
+
+                                    <Text text="{bankName}"/>
+
+                                    <ObjectNumber
+                                        number="{principalAmtText}"
+                                        unit="INR"
+                                        class="fdMono"/>
+
+                                    <Text
+                                        text="{interestRateText}"
+                                        class="fdMono"/>
+
+                                    <ObjectNumber
+                                        number="{interestAmtText}"
+                                        unit="INR"
+                                        class="fdMono"/>
+
+                                    <Link
+                                        text="{fdDocNo}"
+                                        press=".onDisplayJournalEntry"
+                                        class="fdMono"/>
+
+                                    <Link
+                                        text="{fdRevNo}"
+                                        press=".onDisplayJournalEntry"
+                                        class="fdMono"/>
+
+                                    <Text
+                                        text="{postingDateText}"/>
+
+                                    <ObjectStatus
+                                        text="{monthEndForText}"
+                                        state="Information"/>
+
+                                    <Text
+                                        text="{processedBy}"/>
+
+                                    <ObjectStatus
+                                        text="{statusText}"
+                                        state="{statusState}"/>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

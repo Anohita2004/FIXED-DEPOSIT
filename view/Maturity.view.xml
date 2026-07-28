@@ -1,0 +1,285 @@
+<mvc:View
+    controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.Maturity"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:layout="sap.ui.layout"
+    displayBlock="true">
+
+    <Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+
+        <content>
+
+            <VBox class="fdCreatePage fdPageSection horizonSection">
+
+                <!-- FD selection -->
+                <VBox class="fdSectionCard horizonChartCard fdCreateSection">
+
+                    <Toolbar class="fdSectionHeader horizonHeader">
+                        <core:Icon src="sap-icon://action" class="fdMetricIcon fdMetricIconTeal"/>
+                        <Title text="Select Fixed Deposit" level="H3"/>
+                        <ToolbarSpacer/>
+                        <Button text="View History" icon="sap-icon://history" press=".onNavMaturityHistory" type="Transparent" />
+                    </Toolbar>
+
+                    <FlexBox wrap="Wrap" class="fdFormGrid fdCreateGrid" alignItems="End">
+
+                        <VBox class="fdFormGroup">
+                            <Label text="FD Number" required="true"/>
+                            <ComboBox
+                                id="idFdInput"
+                                selectedKey="{maturity>/fdNumber}"
+                                busy="{fdList>/busy}"
+                                items="{path: 'fdList>/items'}"
+                                selectionChange=".onFDSelectionChange"
+                                placeholder="Choose a fixed deposit"
+                                width="260px">
+                                <core:Item key="{fdList>FdAccno}" text="{fdList>FdAccno}"/>
+                            </ComboBox>
+                        </VBox>
+
+                    </FlexBox>
+
+                    <Text
+                        text="{fdList>/error}"
+                        visible="{= !!${fdList>/error} }"
+                        class="fdFormMessage sapUiTinyMarginTop"/>
+
+                </VBox>
+
+                <!-- Snapshot metric tiles for the selected FD -->
+                <HBox class="fdMetricGrid" visible="{= !!${maturity>/fdNumber} }">
+
+                    <VBox class="fdMetricCard blue">
+                        <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+                            <VBox>
+                                <Text text="Principal Amount" class="fdMetricLabel"/>
+                                <ObjectNumber number="{maturity>/principal}" unit="INR" class="fdMetricValue"/>
+                                <Text text="{maturity>/bankName}" class="fdMetricSub"/>
+                            </VBox>
+                            <core:Icon src="sap-icon://money-bills" class="fdMetricBigIcon fdBlueIcon"/>
+                        </HBox>
+                    </VBox>
+
+                    <VBox class="fdMetricCard green">
+                        <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+                            <VBox>
+                                <Text text="Interest Amount" class="fdMetricLabel"/>
+                                <ObjectNumber number="{maturity>/interestText}" unit="INR" class="fdMetricValue"/>
+                                <Text text="{maturity>/interestRate} % · {maturity>/tenor} months" class="fdMetricSub"/>
+                            </VBox>
+                            <core:Icon src="sap-icon://line-chart" class="fdMetricBigIcon fdGreenIcon"/>
+                        </HBox>
+                    </VBox>
+
+                    <VBox class="fdMetricCard orange">
+                        <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+                            <VBox>
+                                <Text text="TDS Amount" class="fdMetricLabel"/>
+                                <ObjectNumber
+                                    number="{maturity>/tdsAmount}"
+                                    unit="INR"
+                                    class="fdMetricValue"
+                                    state="{= ${maturity>/tdsAmount} > 0 ? 'Error' : 'Success' }"/>
+                                <Text
+                                    text="{= ${maturity>/tdsAmount} > 0 ? 'TDS deducted' : 'No TDS applicable' }"
+                                    class="fdMetricSub"/>
+                            </VBox>
+                            <core:Icon src="sap-icon://receipt" class="fdMetricBigIcon fdOrangeIcon"/>
+                        </HBox>
+                    </VBox>
+
+                    <VBox class="fdMetricCard purple">
+                        <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+                            <VBox>
+                                <Text text="FD Document" class="fdMetricLabel"/>
+                                <Text
+                                    text="{= ${maturity>/fdDocNo} ? ${maturity>/fdDocNo} : 'Not posted yet' }"
+                                    class="fdMetricValue fdMono"/>
+                                <Text text="{maturity>/maturityStatusText}" class="fdMetricSub"/>
+                            </VBox>
+                            <core:Icon src="sap-icon://accounting-document-verification" class="fdMetricBigIcon fdPurpleIcon"/>
+                        </HBox>
+                    </VBox>
+
+                </HBox>
+
+                <!-- FD detail form & Timeline -->
+                <layout:Grid defaultSpan="L8 M12 S12" class="horizonGrid" visible="{= !!${maturity>/fdNumber} }">
+                
+                <VBox class="fdSectionCard">
+
+                    <Toolbar class="fdSectionHeader">
+                        <core:Icon src="sap-icon://detail-view" class="fdMetricIcon fdMetricIconTeal"/>
+                        <Title text="Maturity Details" level="H3"/>
+                    </Toolbar>
+
+                    <form:SimpleForm
+                        editable="false"
+                        layout="ResponsiveGridLayout"
+                        labelSpanS="12" labelSpanM="4" labelSpanL="3" labelSpanXL="3"
+                        columnsM="2" columnsL="3" columnsXL="3">
+
+                        <Label text="Company Code"/>
+                        <Text text="{maturity>/coCode}"/>
+
+                        <Label text="Bank Name"/>
+                        <Text text="{maturity>/bankName}"/>
+
+                        <Label text="Start Date"/>
+                        <Text text="{maturity>/startDate}"/>
+
+                        <Label text="Principal Amount"/>
+                        <ObjectNumber number="{maturity>/principal}" unit="INR"/>
+
+                        <Label text="Interest Rate"/>
+                        <Text text="{maturity>/interestRate} %"/>
+
+                        <Label text="Tenor"/>
+                        <Text text="{maturity>/tenor} Months"/>
+
+                        <Label text="Interest Amount"/>
+                        <ObjectNumber
+                            number="{maturity>/interestText}"
+                            unit="INR"
+                            state="Information"/>
+
+                        <Label text="TDS Amount"
+                            visible="{= ${maturity>/tdsAmount} > 0 }"/>
+                        <ObjectNumber
+                            number="{maturity>/tdsAmount}"
+                            unit="INR"
+                            state="Error"
+                            visible="{= ${maturity>/tdsAmount} > 0 }"/>
+
+                        <Label text="TDS GL Account"
+                            visible="{= ${maturity>/tdsGl} !== '' }"/>
+                        <Text text="{maturity>/tdsGl}"
+                            visible="{= ${maturity>/tdsGl} !== '' }"/>
+
+                        <Label text="Maturity Document Number"
+                            visible="{= ${maturity>/tdsDocNo} !== '' }"/>
+                        <Text text="{maturity>/tdsDocNo}" class="fdMono"
+                            visible="{= ${maturity>/tdsDocNo} !== '' }"/>
+
+                        <Label text="FD Document Number"
+                            visible="{= ${maturity>/fdDocNo} !== '' }"/>
+                        <Text text="{maturity>/fdDocNo}" class="fdMono"
+                            visible="{= ${maturity>/fdDocNo} !== '' }"/>
+
+                    </form:SimpleForm>
+
+                </VBox>
+
+                <!-- Lifecycle Timeline -->
+                <VBox class="fdSectionCard horizonChartCard">
+                    <layoutData>
+                        <layout:GridData span="L4 M12 S12" />
+                    </layoutData>
+                    <Toolbar class="fdSectionHeader horizonHeader">
+                        <core:Icon src="sap-icon://history" class="fdMetricIcon"/>
+                        <Title text="Lifecycle Timeline" level="H3"/>
+                    </Toolbar>
+                    <VBox items="{maturity>/timeline}" class="horizonTimeline">
+                        <HBox class="horizonTimelineItem">
+                            <core:Icon src="{maturity>icon}" class="horizonTimelineIcon {maturity>colorClass}"/>
+                            <VBox class="horizonTimelineContent">
+                                <Text text="{maturity>title}" class="horizonTimelineTitle"/>
+                                <Text text="{maturity>subtitle}" class="horizonTimelineSub"/>
+                            </VBox>
+                            <Text text="{maturity>dateText}" class="horizonTimelineDate"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                </layout:Grid>
+
+                <MessageStrip
+                    text="{maturity>/maturityStatusText}"
+                    type="Success"
+                    showIcon="true"
+                    class="sapUiSmallMarginBottom"
+                    visible="{= ${maturity>/maturityStatusText} !== '' }"/>
+
+                <!-- Action Execution Card -->
+                <VBox class="fdSectionCard horizonChartCard fdCreateSection" visible="{ui>/maturityFdSelected}">
+
+                    <Toolbar class="fdSectionHeader horizonHeader">
+                        <core:Icon src="sap-icon://process" class="fdMetricIcon fdMetricIconTeal"/>
+                        <Title text="Process Maturity" level="H3"/>
+                    </Toolbar>
+
+                    <VBox class="fdRenewalOptions">
+                        <CheckBox
+                            text="TDS Applicable"
+                            selected="{maturity>/tdsApplicable}"
+                            select=".onTDSSelect"/>
+                        <Text
+                            text="Runs the maturity/TDS posting on the backend for the selected FD."
+                            class="fdRenewalHint"/>
+                    </VBox>
+
+                </VBox>
+
+                <!-- Posted maturity data, returned via MaturityDataDisplaySet
+                     (MATURITYDATADISP_GET_ENTITYSET) once processing completes -->
+                <VBox class="fdSectionCard" visible="{= ${maturityDisplay>/records}.length > 0 || ${maturityDisplay>/busy} }">
+
+                    <Toolbar class="fdSectionHeader">
+                        <core:Icon src="sap-icon://complete" class="fdMetricIcon fdMetricIconTeal"/>
+                        <Title text="Posted Maturity Data" level="H3"/>
+                        <ToolbarSpacer/>
+                        <BusyIndicator visible="{maturityDisplay>/busy}" size="1rem"/>
+                    </Toolbar>
+
+                    <Text
+                        text="{maturityDisplay>/error}"
+                        visible="{= !!${maturityDisplay>/error} }"
+                        class="fdFormMessage sapUiTinyMarginBottom"/>
+
+                    <Table
+                        items="{maturityDisplay>/records}"
+                        class="fdDataTable"
+                        visible="{= ${maturityDisplay>/records}.length > 0 }">
+                        <columns>
+                            <Column><Text text="FD Number"/></Column>
+                            <Column><Text text="Bank"/></Column>
+                            <Column><Text text="Principal"/></Column>
+                            <Column><Text text="Rate"/></Column>
+                            
+                            <Column><Text text="Accounting Doc"/></Column>
+                            <Column><Text text="TDS Applicable"/></Column>
+                            <Column><Text text="TDS Amount"/></Column>
+                            <Column><Text text="Maturity Doc No"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <ObjectIdentifier title="{maturityDisplay>fdAccno}"/>
+                                    <Text text="{maturityDisplay>bankName}"/>
+                                    <ObjectNumber number="{maturityDisplay>principalAmt}" unit="INR"/>
+                                    <Text text="{maturityDisplay>interestRate} %"/>
+                                   
+                                    <Text text="{maturityDisplay>fdDocNo}" class="fdMono"/>
+                                    <ObjectStatus text="{maturityDisplay>tdsApplicable}" state="{maturityDisplay>tdsState}"/>
+                                    <ObjectNumber number="{maturityDisplay>tdsAmt}" unit="INR"/>
+                                    <Link
+										text="{maturityDisplay>tdsDocNo}"
+										press=".onDisplayJournalEntry"
+										class="fdMono"/>
+                                    
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

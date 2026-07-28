@@ -1,0 +1,118 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.LegacyFD"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:form="sap.ui.layout.form"
+	xmlns="sap.m"
+	displayBlock="true">
+
+	<Page
+		title="Post Legacy Fixed Deposit"
+		showHeader="false"
+		enableScrolling="true"
+		class="fdContentPage horizonDashboardPage">
+
+		<content>
+			<VBox class="fdCreatePage fdPageSection horizonSection">
+
+				<VBox class="fdSectionCard horizonChartCard fdCreateSection">
+					<Toolbar class="fdSectionHeader horizonHeader">
+						<Title text="Legacy FD Details" level="H3"/>
+					</Toolbar>
+
+					<form:SimpleForm
+						layout="ResponsiveGridLayout"
+						labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+						adjustLabelSpan="false"
+						emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
+						columnsXL="2" columnsL="2" columnsM="1"
+						singleContainerFullSize="false">
+						<form:content>
+							<core:Title text="General Information" />
+							<Label text="Company Code" required="true"/>
+							<Input value="{legacyFd>/coCode}" placeholder="1000" showValueHelp="true" valueHelpRequest=".onLegacyCompanyCodeValueHelp"/>
+
+							<Label text="Bank" required="true"/>
+							<Input value="{legacyFd>/bank}" placeholder="Bank name" showValueHelp="true" valueHelpRequest=".onLegacyBankNameValueHelp"/>
+
+							<Label text="FD Number" required="true"/>
+							<Input value="{legacyFd>/id}" placeholder="00001"/>
+
+							<Label text="Purpose of FD" required="true"/>
+							<Input value="{legacyFd>/openingFd}" showValueHelp="true" valueHelpRequest=".onLegacyOpeningFdValueHelp"/>
+
+							<core:Title text="Terms" />
+							<Label text="Principal Amount" required="true"/>
+							<Input value="{legacyFd>/principal}" type="Number"/>
+
+							<Label text="Annual Rate (%)" required="true"/>
+							<Input value="{legacyFd>/rate}" type="Number"/>
+
+							<Label text="Start Date" required="true"/>
+							<DatePicker value="{legacyFd>/start}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy"/>
+
+							<Label text="Creation Date" required="true"/>
+							<DatePicker value="{legacyFd>/createDate}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy" editable="false"/>
+
+							<Label text="Tenor (Months)" required="true"/>
+							<Input value="{legacyFd>/tenor}" type="Number"/>
+
+							<Label text="Compounding" required="true"/>
+							<Select selectedKey="{legacyFd>/freq}">
+								<items>
+									<core:Item key="12" text="Monthly"/>
+									<core:Item key="4" text="Quarterly"/>
+									<core:Item key="2" text="Half-yearly"/>
+									<core:Item key="1" text="Yearly"/>
+								</items>
+							</Select>
+						</form:content>
+					</form:SimpleForm>
+				</VBox>
+
+				<VBox class="fdSectionCard horizonChartCard fdCreateSection">
+					<Toolbar class="fdSectionHeader horizonHeader">
+						<Title text="Accounting Assignment" level="H3"/>
+					</Toolbar>
+
+					<form:SimpleForm
+						layout="ResponsiveGridLayout"
+						labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+						adjustLabelSpan="false"
+						emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
+						columnsXL="2" columnsL="2" columnsM="1"
+						singleContainerFullSize="false">
+						<form:content>
+							<core:Title text="GL Mapping" />
+							<Label text="FD Principal GL" required="true"/>
+							<Input value="{legacyFd>/glP}" showValueHelp="true" valueHelpRequest=".onLegacyGlPrincipalValueHelp"/>
+
+							<Label text="Bank GL" required="true"/>
+							<Input value="{legacyFd>/bankGL}" showValueHelp="true" enabled="false" valueHelpRequest=".onLegacyBankGlValueHelp"/>
+
+							<Label text="Interest Receivable GL" required="true"/>
+							<Input value="{legacyFd>/glI}" showValueHelp="true" valueHelpRequest=".onLegacyGlReceivableValueHelp"/>
+
+							<Label text="Interest Income GL" required="true"/>
+							<Input value="{legacyFd>/glInc}" showValueHelp="true" valueHelpRequest=".onLegacyGlIncomeValueHelp"/>
+
+							<core:Title text="Costing" />
+							<Label text="Profit Center" required="true"/>
+							<Input value="{legacyFd>/profitCenter}" showValueHelp="true" valueHelpRequest=".onLegacyProfitCenterValueHelp"/>
+						</form:content>
+					</form:SimpleForm>
+				</VBox>
+
+			</VBox>
+		</content>
+
+		<footer>
+			<Toolbar>
+				<Text text="{legacyFd>/message}" class="fdFormMessage"/>
+				<ToolbarSpacer/>
+				<Button text="Post Legacy FD" type="Emphasized" press=".onPostLegacyFD" class="fdCreateButton"/>
+			</Toolbar>
+		</footer>
+
+	</Page>
+</mvc:View>

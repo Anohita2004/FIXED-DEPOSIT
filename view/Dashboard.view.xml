@@ -1,0 +1,274 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.Dashboard"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:layout="sap.ui.layout"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+		<content>
+			<VBox class="fdPageSection horizonSection">
+				<HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+					<ObjectStatus text="{/loadStatus}" state="{/loadStatusState}" class="fdLoadStatus"/>
+					<Button 
+						text="{/metrics/maturingThisMonth} Maturing This Month" 
+						type="{= ${/metrics/maturingThisMonth} > 0 ? 'Reject' : 'Default' }" 
+						icon="sap-icon://calendar"
+						press=".onNavMaturityAlerts"/>
+				</HBox>
+
+				<!-- 1. KPI Cards -->
+				<HBox class="fdMetricGrid horizonMetricGrid">
+					
+					<!-- Total Fixed Deposits -->
+					<VBox class="fdMetricCard horizonCard blue">
+						<HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+							<core:Icon src="sap-icon://money-bills" class="fdMetricBigIcon horizonIcon"/>
+							<VBox>
+								<Text text="Total Fixed Deposits" class="fdMetricLabel"/>
+								<Text text="{/metrics/activeCount}" class="fdMetricValue"/>
+								<Text text="Active" class="fdMetricSub"/>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<!-- Total Principal -->
+					<VBox class="fdMetricCard horizonCard green">
+						<HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+							<core:Icon src="sap-icon://lead" class="fdMetricBigIcon horizonIcon"/>
+							<VBox>
+								<Text text="Total Principal" class="fdMetricLabel"/>
+								<Text text="{/metrics/totalCorpus}" class="fdMetricValue"/>
+								<Text text="Current Holdings" class="fdMetricSub"/>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<!-- Accrued Interest -->
+					<VBox class="fdMetricCard horizonCard purple">
+						<HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+							<core:Icon src="sap-icon://line-chart" class="fdMetricBigIcon horizonIcon"/>
+							<VBox>
+								<Text text="Accrued Interest" class="fdMetricLabel"/>
+								<Text text="{/metrics/accruedInterest}" class="fdMetricValue"/>
+								<Text text="Current Month" class="fdMetricSub"/>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<!-- Average Interest Rate -->
+					<VBox class="fdMetricCard horizonCard teal">
+						<HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+							<core:Icon src="sap-icon://unpaid-leave" class="fdMetricBigIcon horizonIcon"/>
+							<VBox>
+								<Text text="Avg Interest Rate" class="fdMetricLabel"/>
+								<Text text="{/averageInterestRate}" class="fdMetricValue"/>
+								<Text text="Across active FDs" class="fdMetricSub"/>
+							</VBox>
+						</HBox>
+					</VBox>
+
+				</HBox>
+
+				<!-- 2. Dashboard Layout: First Row of Charts -->
+				<layout:Grid defaultSpan="L8 M12 S12" class="horizonGrid">
+					
+					<!-- Portfolio Trend (Large Area Chart) -->
+					<VBox class="horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<core:Icon src="sap-icon://business-objects-experience" class="fdMetricIcon"/>
+							<Title text="Portfolio Trend" level="H3"/>
+						</Toolbar>
+						<viz:VizFrame id="portfolioTrendChart" uiConfig="{applicationSet:'fiori'}" vizType="line" width="100%" height="300px">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{/portfolioTrend}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="Month" value="{month}" />
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Amount" value="{amount}" />
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Amount" />
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Month" />
+							</viz:feeds>
+						</viz:VizFrame>
+					</VBox>
+
+					<!-- Bank Allocation (Donut Chart) -->
+					<VBox class="horizonChartCard">
+						<layoutData>
+							<layout:GridData span="L4 M12 S12" />
+						</layoutData>
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<core:Icon src="sap-icon://pie-chart" class="fdMetricIcon"/>
+							<Title text="Bank Allocation" level="H3"/>
+						</Toolbar>
+						<viz:VizFrame id="bankAllocationChart" uiConfig="{applicationSet:'fiori'}" vizType="donut" width="100%" height="300px">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{/bankAllocation}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="Bank" value="{bank}" />
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Amount" value="{amount}" />
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="size" type="Measure" values="Amount" />
+								<viz.feeds:FeedItem uid="color" type="Dimension" values="Bank" />
+							</viz:feeds>
+						</viz:VizFrame>
+					</VBox>
+
+				</layout:Grid>
+
+				<!-- Second Row of Charts -->
+				<layout:Grid defaultSpan="L12 M12 S12" class="horizonGrid">
+					
+					<!-- Interest Rate Comparison (Horizontal Bar Chart) -->
+					<VBox class="horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<core:Icon src="sap-icon://horizontal-bar-chart" class="fdMetricIcon"/>
+							<Title text="Interest Rate Comparison" level="H3"/>
+						</Toolbar>
+						<viz:VizFrame id="interestRateChart" uiConfig="{applicationSet:'fiori'}" vizType="bar" width="100%" height="300px">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{/topBanks}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="Bank" value="{bank}" />
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Rate" value="{rate}" />
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Rate" />
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Bank" />
+							</viz:feeds>
+						</viz:VizFrame>
+					</VBox>
+
+
+				</layout:Grid>
+
+				<!-- Third Row -->
+				<layout:Grid defaultSpan="L12 M12 S12" class="horizonGrid">
+					
+					<!-- Monthly Interest Accrual Trend (Large Line Chart) -->
+					<VBox class="horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<core:Icon src="sap-icon://line-chart" class="fdMetricIcon"/>
+							<Title text="Monthly Interest Accrual Trend" level="H3"/>
+						</Toolbar>
+						<viz:VizFrame id="interestTrendChart" uiConfig="{applicationSet:'fiori'}" vizType="line" width="100%" height="300px">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{/interestTrend}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="Month" value="{month}" />
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Interest" value="{interest}" />
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Interest" />
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Month" />
+							</viz:feeds>
+						</viz:VizFrame>
+					</VBox>
+
+				</layout:Grid>
+
+				<!-- Fourth Row: Events & Banks -->
+				<layout:Grid defaultSpan="L6 M12 S12" class="horizonGrid">
+					
+					<!-- Upcoming Events -->
+					<VBox class="horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<core:Icon src="sap-icon://appointment" class="fdMetricIcon"/>
+							<Title text="Upcoming Events" level="H3"/>
+						</Toolbar>
+						<VBox items="{/upcomingEvents}" class="horizonTimeline">
+							<HBox class="horizonTimelineItem">
+								<core:Icon src="{icon}" class="horizonTimelineIcon {colorClass}"/>
+								<VBox class="horizonTimelineContent">
+									<Text text="{title}" class="horizonTimelineTitle"/>
+									<Text text="{subtitle}" class="horizonTimelineSub"/>
+								</VBox>
+								<Text text="{dateText}" class="horizonTimelineDate"/>
+							</HBox>
+						</VBox>
+					</VBox>
+
+					<!-- Top Performing Banks -->
+					<VBox class="horizonChartCard">
+						<Toolbar class="fdSectionHeader horizonHeader">
+							<core:Icon src="sap-icon://trophy" class="fdMetricIcon"/>
+							<Title text="Top Performing Banks" level="H3"/>
+						</Toolbar>
+						<VBox items="{/topBanks}" class="horizonRankingList">
+							<HBox class="horizonRankingItem" justifyContent="SpaceBetween" alignItems="Center">
+								<HBox alignItems="Center">
+									<core:Icon src="sap-icon://bank" class="horizonRankingIcon"/>
+									<Text text="{bank}" class="horizonRankingBank"/>
+								</HBox>
+								<Text text="{rateText}" class="horizonRankingRate"/>
+							</HBox>
+						</VBox>
+					</VBox>
+
+				</layout:Grid>
+
+				<!-- 5. Quick Actions -->
+				<VBox class="horizonChartCard quickActionsSection">
+					<Toolbar class="fdSectionHeader horizonHeader">
+						<core:Icon src="sap-icon://touch" class="fdMetricIcon"/>
+						<Title text="Quick Actions" level="H3"/>
+					</Toolbar>
+					
+					<layout:Grid defaultSpan="L3 M6 S12">
+						
+						<!-- Active Fixed Deposits -->
+						<VBox class="quickActionCard" press=".onNavFds">
+							<core:Icon src="sap-icon://table-view" class="qaIcon blue"/>
+							<Text text="Active Fixed Deposits" class="qaTitle"/>
+							<Button text="View Active FDs" type="Emphasized" class="qaBtn" press=".onNavFds"/>
+						</VBox>
+
+						<!-- Day-wise Interest Accrual -->
+						<VBox class="quickActionCard" press=".onNavInterest">
+							<core:Icon src="sap-icon://table-view" class="qaIcon green"/>
+							<Text text="Day-wise Interest Accrual" class="qaTitle"/>
+							<Button text="View Interest Accrual" type="Emphasized" class="qaBtn" press=".onNavInterest"/>
+						</VBox>
+
+						<!-- Month End -->
+						<VBox class="quickActionCard" press=".onNavMonthEnd">
+							<core:Icon src="sap-icon://synchronize" class="qaIcon purple"/>
+							<Text text="Month End Data" class="qaTitle"/>
+							<Button text="View Month End" type="Emphasized" class="qaBtn" press=".onNavMonthEnd"/>
+						</VBox>
+
+						<!-- Maturity -->
+						<VBox class="quickActionCard" press=".onNavMaturity">
+							<core:Icon src="sap-icon://flag" class="qaIcon orange"/>
+							<Text text="Maturity" class="qaTitle"/>
+							<Button text="View Maturity Table" type="Emphasized" class="qaBtn" press=".onNavMaturity"/>
+						</VBox>
+
+					</layout:Grid>
+				</VBox>
+
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

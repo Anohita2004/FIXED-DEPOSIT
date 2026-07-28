@@ -1,0 +1,136 @@
+{
+    "resources": [
+        {
+            "name": "service/FdDetailsService.js"
+        },
+        {
+            "name": "view/LegacyFD.view.xml"
+        },
+        {
+            "name": "view/MaturityAlerts.view.xml"
+        },
+        {
+            "name": "view/MaturityHistory.view.xml"
+        },
+        {
+            "name": "view/Dashboard.view.xml"
+        },
+        {
+            "name": "view/View1.view.xml"
+        },
+        {
+            "name": "view/NewFD.view.xml"
+        },
+        {
+            "name": "view/Maturity.view.xml"
+        },
+        {
+            "name": "view/MonthEnd.view.xml"
+        },
+        {
+            "name": "view/Settings.view.xml"
+        },
+        {
+            "name": "view/App.view.xml"
+        },
+        {
+            "name": "view/AccountingEntries.view.xml"
+        },
+        {
+            "name": "view/InterestAccrual.view.xml"
+        },
+        {
+            "name": "view/FixedDeposits.view.xml"
+        },
+        {
+            "name": "css/style.css"
+        },
+        {
+            "name": "controller/MaturityAlerts.controller.js"
+        },
+        {
+            "name": "controller/Dashboard.controller.js"
+        },
+        {
+            "name": "controller/App.controller.js"
+        },
+        {
+            "name": "controller/Settings.controller.js"
+        },
+        {
+            "name": "controller/Maturity.controller.js"
+        },
+        {
+            "name": "controller/AccountingEntries.controller.js"
+        },
+        {
+            "name": "controller/BaseController.js"
+        },
+        {
+            "name": "controller/InterestAccrual.controller.js"
+        },
+        {
+            "name": "controller/MonthEnd.controller.js"
+        },
+        {
+            "name": "controller/NewFD.controller.js"
+        },
+        {
+            "name": "controller/View1.controller.js"
+        },
+        {
+            "name": "controller/LegacyFD.controller.js"
+        },
+        {
+            "name": "controller/MaturityHistory.controller.js"
+        },
+        {
+            "name": "controller/FixedDeposits.controller.js"
+        },
+        {
+            "name": "Component.js"
+        },
+        {
+            "name": ".project.json"
+        },
+        {
+            "name": "model/models.js"
+        },
+        {
+            "name": "Component-preload.js",
+            "merged": true
+        },
+        {
+            "name": ".user.project.json"
+        },
+        {
+            "name": "resources.json",
+            "merged": true
+        },
+        {
+            "name": "util/Frequency.js"
+        },
+        {
+            "name": "util/DashboardChartHelper.js"
+        },
+        {
+            "name": "util/ODataErrorHandler.js"
+        },
+        {
+            "name": "localService/metadata.xml"
+        },
+        {
+            "name": "manifest.json"
+        },
+        {
+            "name": "index.html"
+        },
+        {
+            "name": "i18n/i18n.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "neo-app.json"
+        }
+    ]
+}

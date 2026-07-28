@@ -1,0 +1,84 @@
+<edmx:Edmx
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZFI_FIXED_DEPOSIT_SRV" xml:lang="en" sap:schema-version="1">
+            <Annotation
+                xmlns="http://docs.oasis-open.org/odata/ns/edm" Term="Core.SchemaVersion" String="1.0.0"/>
+                <EntityType Name="CocodeF4" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="BUKRS"/>
+                    </Key>
+                    <Property Name="BUKRS" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Company Code"/>
+                </EntityType>
+                <EntityType Name="BankNameF4" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="BANKL"/>
+                    </Key>
+                    <Property Name="BANKL" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Bank Key"/>
+                    <Property Name="BANKA" Type="Edm.String" MaxLength="60" sap:unicode="false" sap:label="Bank Name"/>
+                </EntityType>
+                <EntityType Name="GLInterestF4" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="saknr"/>
+                    </Key>
+                    <Property Name="saknr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="GL Interest"/>
+                    <Property Name="TXT50" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="GL Description"/>
+                </EntityType>
+                <EntityType Name="GLIncomeF4" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="saknr"/>
+                    </Key>
+                    <Property Name="saknr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="GL Account"/>
+                    <Property Name="TXT50" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="GL Description"/>
+                </EntityType>
+                <EntityType Name="ProfitCenterF4" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="Prctr"/>
+                    </Key>
+                    <Property Name="Prctr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Profit Center"/>
+                    <Property Name="ktext" Type="Edm.String" sap:unicode="false" sap:label="Name"/>
+                </EntityType>
+                <EntityType Name="GLAccountF4" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="saknr"/>
+                    </Key>
+                    <Property Name="saknr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="GL Account"/>
+                    <Property Name="Txt50" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="GL Description"/>
+                </EntityType>
+                <EntityType Name="FdDetails" sap:content-version="1">
+                    <Key>
+                        <PropertyRef Name="CoCode"/>
+                        <PropertyRef Name="FdAccno"/>
+                    </Key>
+                    <Property Name="CoCode" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Company Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="FdAccno" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="FD Account Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="BankName" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Bank Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="PrincipalAmt" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Principal amount (₹)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="InterestRate" Type="Edm.Decimal" Nullable="false" Precision="5" Scale="2" sap:unicode="false" sap:label="ZINTEREST_RATE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="StartDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="TenorMonths" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Tenor (months)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="CompoundFreq" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Compounding frequen" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="GlPrincipal" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="GL FD principal acc" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="GlReceivable" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="GL--interest receiv" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="GlIncome" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="GL — interest income" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                    <Property Name="ProfitCenter" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Profit Center" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                </EntityType>
+                <EntityContainer Name="ZFI_FIXED_DEPOSIT_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                    <EntitySet Name="CocodeF4Set" EntityType="ZFI_FIXED_DEPOSIT_SRV.CocodeF4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                    <EntitySet Name="BankNameF4Set" EntityType="ZFI_FIXED_DEPOSIT_SRV.BankNameF4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                    <EntitySet Name="GLInterestF4Set" EntityType="ZFI_FIXED_DEPOSIT_SRV.GLInterestF4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                    <EntitySet Name="GLIncomeF4Set" EntityType="ZFI_FIXED_DEPOSIT_SRV.GLIncomeF4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                    <EntitySet Name="ProfitCenterF4Set" EntityType="ZFI_FIXED_DEPOSIT_SRV.ProfitCenterF4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                    <EntitySet Name="GLAccountF4Set" EntityType="ZFI_FIXED_DEPOSIT_SRV.GLAccountF4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                    <EntitySet Name="FdDetailsSet" EntityType="ZFI_FIXED_DEPOSIT_SRV.FdDetails" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                </EntityContainer>
+                <atom:link
+                    xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="./sap/ZFI_FIXED_DEPOSIT_SRV/$metadata"/>
+                    <atom:link
+                        xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="./sap/ZFI_FIXED_DEPOSIT_SRV/$metadata"/>
+                    </Schema>
+                </edmx:DataServices>
+            </edmx:Edmx>

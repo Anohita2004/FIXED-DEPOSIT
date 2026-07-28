@@ -1,0 +1,117 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.FixedDeposits"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+		<content>
+			<VBox class="fdPageSection horizonSection">
+				
+				<VBox class="fdSectionCard horizonChartCard">
+					<Toolbar class="fdSectionHeader horizonHeader">
+						<core:Icon src="sap-icon://bank" class="fdMetricIcon fdMetricIconTeal"/>
+						<Title text="Active fixed deposits" level="H3"/>
+
+						<ToolbarSpacer/>
+
+						<SearchField
+							width="18rem"
+							placeholder="Search FD, Bank, Document..."
+							liveChange=".onSearchFD"/>
+
+						<Button
+							icon="sap-icon://sort"
+							tooltip="Sort"
+							type="Transparent"
+							press=".onSortFD"
+							class="fdSmallButton"/>
+
+						<Button
+							icon="sap-icon://filter"
+							tooltip="Filter"
+							type="Transparent"
+							press=".onFilterFD"
+							class="fdSmallButton"/>
+
+						<Button
+							icon="sap-icon://excel-attachment"
+							tooltip="Export to Excel"
+							type="Transparent"
+							press=".onExportFD"
+							class="fdSmallButton"/>
+
+						<Button
+							text="Refresh"
+							icon="sap-icon://refresh"
+							type="Transparent"
+							press=".onRefreshFDTable"
+							class="fdSmallButton"/>
+
+						<Button
+							text="New FD"
+							icon="sap-icon://add"
+							type="Emphasized"
+							press=".onNavNewfd"
+							class="fdSmallButton"/>
+						<Button
+							text="Run month-end"
+							icon="sap-icon://synchronize"
+							type="Emphasized"
+							press=".onRunMonthEnd"
+							class="fdSmallButton"/>
+					</Toolbar>
+
+					<SegmentedButton
+						id="fdQuickFilterBar"
+						class="fdTabs fdQuickFilterBar"
+						selectedKey="{ui>/quickFilter}"
+						select=".onQuickFilterFD">
+						<items>
+							<SegmentedButtonItem text="All" key="all"/>
+							<SegmentedButtonItem text="Active" key="active"/>
+							<SegmentedButtonItem text="Matured" key="matured"/>
+							<SegmentedButtonItem text="Auto Renew" key="autoRenew"/>
+						</items>
+					</SegmentedButton>
+
+					<Table growing="true" growingThreshold="100" growingScrollToLoad="true" items="{/fds}" class="fdDataTable" id="fdTable" mode="MultiSelect">
+						<columns>
+							<Column><Text text="FD number"/></Column>
+							<Column><Text text="Bank"/></Column>
+							<Column><Text text="Principal"/></Column>
+							<Column><Text text="Rate"/></Column>
+							<Column><Text text="Start"/></Column>
+							<Column><Text text="Creation Date"/></Column>
+							<Column><Text text="Maturity"/></Column>
+							<Column><Text text="Status"/></Column>
+							<Column><Text text="Accounting Doc"/></Column>
+							<Column><Text text="Auto-renew"/></Column>
+							<Column><Text text="Actions"/></Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<ObjectIdentifier title="{id}"/>
+									<Text text="{bank}"/>
+									<Text text="{principalText}"/>
+									<Text text="{rateText}"/>
+									<Text text="{startText}"/>
+									<Text text="{creationDateText}"/>
+									<Text text="{maturityText}"/>
+									<ObjectStatus text="{statusText}" state="{statusState}"/>
+									<Link
+										text="{fdDocNoText}"
+										press=".onDisplayJournalEntry"
+										class="fdMono"/>
+									<ObjectStatus text="{autoRenewText}" icon="{autoRenewIcon}" state="{autoRenewState}"/>
+									<Button text="Actions" press=".onOpenMaturity" class="fdSmallButton"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</VBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

@@ -1,0 +1,37 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.Settings"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:suite="sap.suite.ui.microchart"
+	xmlns="sap.m"
+	displayBlock="true">
+	<Page showHeader="false" enableScrolling="true" class="fdContentPage horizonDashboardPage">
+		<content>
+			<VBox class="fdPageSection horizonSection">
+												<VBox class="fdSectionCard horizonChartCard fdSettingsSection">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<Title text="Accrual and posting settings" level="H3"/>
+													</Toolbar>
+													<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Auto month-end accrual posting"/><Text text="Post interest entry on last calendar day of month" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+													<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Auto first-day reversal"/><Text text="Reverse previous month accrual on 1st of next month" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+													<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Maturity alarm - 30 days"/><Text text="Alert 30 days before maturity date" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+													<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Maturity alarm - 15 days"/><Text text="Alert 15 days before maturity" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+													<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Maturity alarm - 7 days"/><Text text="Urgent alert 7 days before maturity" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+													<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Post maturity accounting automatically"/><Text text="On maturity date, auto-post settlement entries" class="fdMuted"/></VBox><Switch state="false"/></FlexBox>
+												</VBox>
+												<VBox class="fdSectionCard horizonChartCard fdSettingsSection">
+													<Toolbar class="fdSectionHeader horizonHeader">
+														<Title text="Default GL mapping" level="H3"/>
+													</Toolbar>
+													<FlexBox wrap="Wrap" class="fdFormGrid">
+														<VBox class="fdFormGroup"><Label text="FD principal GL"/><Input value=""/></VBox>
+														<VBox class="fdFormGroup"><Label text="Interest receivable GL"/><Input value=""/></VBox>
+														<VBox class="fdFormGroup"><Label text="Interest income GL"/><Input value=""/></VBox>
+														<VBox class="fdFormGroup"><Label text="Bank settlement GL"/><Input value=""/></VBox>
+													</FlexBox>
+													<Button text="Save settings" icon="sap-icon://save" type="Emphasized" press=".onSaveSettings" class="fdActionButton"/>
+												</VBox>
+											</VBox>
+		</content>
+	</Page>
+</mvc:View>

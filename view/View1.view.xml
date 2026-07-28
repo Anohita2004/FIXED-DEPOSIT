@@ -1,0 +1,518 @@
+<mvc:View
+	controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.View1"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:suite="sap.suite.ui.microchart"
+	xmlns="sap.m"
+	displayBlock="true">
+	<App class="fdShell">
+		<pages>
+			<Page showHeader="false" class="fdPage">
+				<content>
+					<HBox class="fdAppFrame">
+						<VBox class="fdSidebar">
+							<VBox class="fdLogo">
+								<HBox alignItems="Center" class="fdLogoTitle">
+									<core:Icon src="sap-icon://capital-projects" class="fdLogoIcon"/>
+									<Text text="FD Manager"/>
+								</HBox>
+								<Text text="SAP Treasury Module" class="fdLogoSub"/>
+							</VBox>
+
+							<Text text="Overview" class="fdNavSection"/>
+							<Button text="Dashboard" icon="sap-icon://business-objects-experience" type="{ui>/nav/dashboard}" press=".onNavDashboard" class="fdNavButton"/>
+							<Button text="Fixed Deposits" icon="sap-icon://money-bills" type="{ui>/nav/fds}" press=".onNavFds" class="fdNavButton"/>
+
+							<Text text="Processing" class="fdNavSection"/>
+							<Button text="Interest Accrual" icon="sap-icon://simulate" type="{ui>/nav/interest}" press=".onNavInterest" class="fdNavButton"/>
+							<Button text="Maturity Alerts" icon="sap-icon://high-priority" type="{ui>/nav/maturity}" press=".onNavMaturity" class="fdNavButton fdAlertNav"/>
+							<Button text="Maturity" icon="sap-icon://high-priority" type="{ui>/nav/maturity}" press=".onNavMaturity" class="fdNavButton fdAlertNav"/>
+							<Button text="Accounting Entries" icon="sap-icon://accounting-document-verification" type="{ui>/nav/accounting}" press=".onNavAccounting" class="fdNavButton"/>
+
+							<Text text="Setup" class="fdNavSection"/>
+							<Button text="New FD" icon="sap-icon://add" type="{ui>/nav/newfd}" press=".onNavNewfd" class="fdNavButton"/>
+							<Button text="Legacy FD" icon="sap-icon://accounting-document-verification" type="{ui>/nav/legacyfd}" press=".onNavLegacyFd" class="fdNavButton"/>
+							<Button text="Settings" icon="sap-icon://action-settings" type="{ui>/nav/settings}" press=".onNavSettings" class="fdNavButton"/>
+
+							<VBox class="fdSidebarSpacer"/>
+							<HBox alignItems="Center" class="fdSidebarUser">
+								<core:Icon src="sap-icon://person-placeholder" class="fdUserAvatar"/>
+								<VBox class="fdUserInfo">
+									<Text text="{/user/name}" class="fdUserName"/>
+									<Text text="Treasury Operations" class="fdUserSub"/>
+								</VBox>
+							</HBox>
+						</VBox>
+
+						<VBox class="fdMain">
+							<Toolbar class="fdTopbar">
+								<Title text="{ui>/title}" level="H2" class="fdPageTitle"/>
+								<ToolbarSpacer/>
+								<Text text="Period: FY 2024-25" class="fdPeriodText"/>
+							</Toolbar>
+
+							<ScrollContainer height="100%" vertical="true" horizontal="false" class="fdContent">
+								<VBox visible="{ui>/visible/dashboard}" class="fdPageSection">
+									<ObjectStatus text="{/loadStatus}" state="{/loadStatusState}" class="fdLoadStatus"/>
+									<HBox class="fdMetricGrid">
+										<VBox class="fdMetricCard blue">
+    <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+
+        <VBox>
+            <Text text="Total FD Corpus" class="fdMetricLabel"/>
+            <Text text="{/metrics/totalCorpus}" class="fdMetricValue"/>
+            <Text text="{/metrics/activeCount}" class="fdMetricSub"/>
+        </VBox>
+
+        <core:Icon
+            src="sap-icon://money-bills"
+            class="fdMetricBigIcon fdBlueIcon"/>
+
+    </HBox>
+</VBox>
+										<VBox class="fdMetricCard green">
+    <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+
+        <VBox>
+            <Text text="Accrued Interest" class="fdMetricLabel"/>
+            <Text text="{/metrics/accruedInterest}" class="fdMetricValue"/>
+            <Text text="{/metrics/accruedInterestPeriod}" class="fdMetricSub"/>
+        </VBox>
+
+        <core:Icon
+            src="sap-icon://line-chart"
+            class="fdMetricBigIcon fdGreenIcon"/>
+
+    </HBox>
+</VBox>
+										<VBox class="fdMetricCard orange">
+    <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+
+        <VBox>
+            <Text text="Maturing This Month" class="fdMetricLabel"/>
+            <Text text="{/metrics/maturingThisMonth}" class="fdMetricValue fdMetricDanger"/>
+            <Text text="Action Required" class="fdMetricSub"/>
+        </VBox>
+
+        <core:Icon
+            src="sap-icon://calendar"
+            class="fdMetricBigIcon fdOrangeIcon"/>
+
+    </HBox>
+</VBox>
+										<VBox class="fdMetricCard purple">
+    <HBox class="fdMetricHead" justifyContent="SpaceBetween" alignItems="Center">
+
+        <VBox>
+            <Text text="Auto Renewal" class="fdMetricLabel"/>
+            <Text text="{/metrics/autoRenewCount}" class="fdMetricValue fdMetricSuccess"/>
+            <Text text="Will Roll Over" class="fdMetricSub"/>
+        </VBox>
+
+        <core:Icon
+            src="sap-icon://refresh"
+            class="fdMetricBigIcon fdPurpleIcon"/>
+
+    </HBox>
+</VBox>
+									</HBox>
+
+									<VBox class="fdSectionCard">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Active fixed deposits" level="H3"/>
+											<ToolbarSpacer/>
+											<Button text="New FD" icon="sap-icon://add" type="Emphasized" press=".onNavNewfd" class="fdSmallButton"/>
+										</Toolbar>
+										<Table id="dashboardFdsTable" items="{/fds}" mode="MultiSelect" class="fdDataTable">
+											<columns>
+												<Column><Text text="FD number"/></Column>
+												<Column><Text text="Bank"/></Column>
+												<Column><Text text="Principal"/></Column>
+												<Column><Text text="Rate"/></Column>
+												<Column><Text text="Start"/></Column>
+												<Column><Text text="Maturity"/></Column>
+												<Column><Text text="Month End"/></Column>
+												<Column><Text text="Doc No"/></Column>
+												<Column><Text text="Rev Doc No"/></Column>
+												<Column><Text text="Status"/></Column>
+												<Column><Text text="Auto-renew"/></Column>
+												<Column><Text text="Actions"/></Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<ObjectIdentifier title="{id}"/>
+														<Text text="{bank}"/>
+														<Text text="{principalText}"/>
+														<Text text="{rateText}"/>
+														<Text text="{startText}"/>
+														<Text text="{maturityText}"/>
+														<ObjectStatus text="{monthEndPerformed}" state="{= ${monthEndPerformed} === 'Yes' ? 'Success' : 'None' }"/>
+														<Text text="{fdDocNoText}" class="fdMono"/>
+														<Text text="{fdRevNoText}" class="fdMono"/>
+														<ObjectStatus text="{statusText}" state="{statusState}"/>
+														<ObjectStatus text="{autoRenewText}" icon="{autoRenewIcon}" state="{autoRenewState}"/>
+														<Button text="Actions" press=".onOpenMaturity" class="fdSmallButton"/>
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</VBox>
+
+									<VBox class="fdSectionCard">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Day-wise interest accrual" level="H3"/>
+										</Toolbar>
+										<Table items="{/interestSchedule}" class="fdDataTable">
+											<columns>
+												<Column><Text text="FD number"/></Column>
+												<Column><Text text="Principal"/></Column>
+												<Column><Text text="Rate %"/></Column>
+												<Column><Text text="Accrued days"/></Column>
+												<Column><Text text="Daily accrual"/></Column>
+												<Column><Text text="Interest accrued"/></Column>
+												<Column><Text text="Accrual period"/></Column>
+												<Column><Text text="Status"/></Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<Text text="{id}"/>
+														<Text text="{principalText}"/>
+														<Text text="{rateText}"/>
+														<Text text="{accruedDaysText}"/>
+														<Text text="{dailyAccrualText}"/>
+														<Text text="{currentMonthAccrualText}"/>
+														<Text text="{accrualPeriodText}"/>
+														<ObjectStatus text="Calculated" state="Success"/>
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/fds}" class="fdPageSection">
+									<SegmentedButton selectedKey="{ui>/fdFilter}" select=".onFDFilter" class="fdTabs">
+										<items>
+											<SegmentedButtonItem key="all" text="All"/>
+											<SegmentedButtonItem key="active" text="Active"/>
+											<SegmentedButtonItem key="matured" text="Matured"/>
+											<SegmentedButtonItem key="renewed" text="Renewed"/>
+										</items>
+									</SegmentedButton>
+									<VBox class="fdSectionCard">
+										<Table id="filteredFdsTable" items="{/filteredFds}" mode="MultiSelect" class="fdDataTable">
+											<columns>
+												<Column><Text text="FD number"/></Column>
+												<Column><Text text="Bank"/></Column>
+												<Column><Text text="Principal"/></Column>
+												<Column><Text text="Rate"/></Column>
+												<Column><Text text="Tenor"/></Column>
+												<Column><Text text="Start"/></Column>
+												<Column><Text text="Maturity"/></Column>
+												<Column><Text text="Month End"/></Column>
+												<Column><Text text="Doc No"/></Column>
+												<Column><Text text="Rev Doc No"/></Column>
+												<Column><Text text="Status"/></Column>
+												<Column><Text text="Auto-renew"/></Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<ObjectIdentifier title="{id}"/>
+														<Text text="{bank}"/>
+														<Text text="{principalText}"/>
+														<Text text="{rateText}"/>
+														<Text text="{tenorText}"/>
+														<Text text="{startText}"/>
+														<Text text="{maturityText}"/>
+														<ObjectStatus text="{monthEndPerformed}" state="{= ${monthEndPerformed} === 'Yes' ? 'Success' : 'None' }"/>
+														<Text text="{fdDocNoText}" class="fdMono"/>
+														<Text text="{fdRevNoText}" class="fdMono"/>
+														<ObjectStatus text="{statusText}" state="{statusState}"/>
+														<ObjectStatus text="{autoRenewText}" icon="{autoRenewIcon}" state="{autoRenewState}"/>
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/interest}" class="fdPageSection">
+									<VBox class="fdSectionCard fdNarrowSection">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Compound interest calculator" level="H3"/>
+										</Toolbar>
+										<FlexBox wrap="Wrap" class="fdFormGrid">
+											<VBox class="fdFormGroup">
+												<Label text="Principal amount (INR)"/>
+												<Input value="{calc>/principal}" type="Number"/>
+											</VBox>
+											<VBox class="fdFormGroup">
+												<Label text="Annual interest rate (%)"/>
+												<Input value="{calc>/rate}" type="Number"/>
+											</VBox>
+											<VBox class="fdFormGroup">
+												<Label text="Tenor (months)"/>
+												<Input value="{calc>/tenor}" type="Number"/>
+											</VBox>
+											<VBox class="fdFormGroup">
+												<Label text="Compounding frequency"/>
+												<Select selectedKey="{calc>/freq}">
+													<items>
+														<core:Item key="12" text="Monthly"/>
+														<core:Item key="4" text="Quarterly"/>
+														<core:Item key="2" text="Half-yearly"/>
+														<core:Item key="1" text="Yearly"/>
+													</items>
+												</Select>
+											</VBox>
+										</FlexBox>
+										<Button text="Calculate" icon="sap-icon://simulate" type="Emphasized" press=".onCalculateInterest" class="fdActionButton"/>
+										<HBox class="fdCalcResult">
+											<VBox>
+												<Text text="Maturity value" class="fdMetricLabel"/>
+												<Text text="{calc>/maturityValueText}" class="fdCalcValue"/>
+											</VBox>
+											<VBox>
+												<Text text="Total interest" class="fdMetricLabel"/>
+												<Text text="{calc>/interestText}" class="fdCalcValue"/>
+											</VBox>
+											<VBox>
+												<Text text="Monthly accrual" class="fdMetricLabel"/>
+												<Text text="{calc>/monthlyText}" class="fdCalcValue"/>
+											</VBox>
+										</HBox>
+									</VBox>
+									<VBox class="fdSectionCard">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Accrual and reversal log" level="H3"/>
+										</Toolbar>
+										<Table items="{/accrualEntries}" class="fdDataTable">
+											<columns>
+												<Column><Text text="Date"/></Column>
+												<Column><Text text="FD Number"/></Column>
+												<Column><Text text="DR:Interest receivable"/></Column>
+												<Column><Text text="CR:Interest income"/></Column>
+												<Column><Text text="Type"/></Column>
+												<Column><Text text="Document no."/></Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<Text text="{dateText}"/>
+														<Text text="{fd}"/>
+														<Text text="{drAmountText}"/>
+														<Text text="{crAmountText}"/>
+														<ObjectStatus text="{type}" state="{entryState}"/>
+														<Text text="{doc}" class="fdMono"/>
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/maturity}" class="fdPageSection">
+									<VBox class="fdSectionCard">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Maturity alerts" level="H3"/>
+										</Toolbar>
+										<VBox items="{/alerts}">
+											<items>
+												<HBox class="fdAlertItem" alignItems="Center">
+													<core:Icon src="{icon}" class="fdAlertIcon"/>
+													<VBox class="fdAlertContent">
+														<Text text="{title}" class="fdAlertTitle"/>
+														<Text text="{subtitle}" class="fdAlertSub"/>
+													</VBox>
+													<Button text="{actionText}" press=".onOpenAlertMaturity" class="fdSmallButton"/>
+												</HBox>
+											</items>
+										</VBox>
+									</VBox>
+									<VBox class="fdSectionCard">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Maturity action queue" level="H3"/>
+										</Toolbar>
+										<Table items="{/fds}" class="fdDataTable">
+											<columns>
+												<Column><Text text="FD number"/></Column>
+												<Column><Text text="Bank"/></Column>
+												<Column><Text text="Principal Amount"/></Column>
+												<Column><Text text="Maturity value"/></Column>
+												<Column><Text text="Maturity date"/></Column>
+												<Column><Text text="Status"/></Column>
+												<Column><Text text="Action"/></Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<ObjectIdentifier title="{id}"/>
+														<Text text="{bank}"/>
+														<Text text="{principalText}"/>
+														<Text text="{maturityValueText}"/>
+														<Text text="{maturityText}"/>
+														<ObjectStatus text="{statusText}" state="{statusState}"/>
+														<Button text="{actionLabel}" icon="{actionIcon}" enabled="{actionEnabled}" press=".onOpenMaturity" class="fdSmallButton"/>
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/accounting}" class="fdPageSection">
+									<SegmentedButton selectedKey="{ui>/acctFilter}" select=".onAcctFilter" class="fdTabs">
+										<items>
+											<SegmentedButtonItem key="all" text="All"/>
+											<SegmentedButtonItem key="accrual" text="Accrual"/>
+											<SegmentedButtonItem key="reversal" text="Reversal"/>
+											<SegmentedButtonItem key="maturity" text="Maturity"/>
+										</items>
+									</SegmentedButton>
+									<VBox class="fdSectionCard">
+										<Table items="{/filteredEntries}" class="fdDataTable">
+											<columns>
+												<Column><Text text="Document No."/></Column>
+												<Column><Text text="Date"/></Column>
+												<Column><Text text="Type"/></Column>
+												<Column><Text text="FD number"/></Column>
+												<Column><Text text="GL Account"/></Column>
+												<Column><Text text="Dr/Cr"/></Column>
+												<Column><Text text="Amount"/></Column>
+												<Column><Text text="Text"/></Column>
+											</columns>
+											<items>
+												<ColumnListItem>
+													<cells>
+														<Text text="{doc}" class="fdMono"/>
+														<Text text="{dateText}"/>
+														<ObjectStatus text="{type}" state="{entryState}"/>
+														<Text text="{fd}"/>
+														<Text text="{gl}" class="fdMono"/>
+														<ObjectStatus text="{drcr}" state="{drcrState}"/>
+														<Text text="{amountText}"/>
+														<Text text="{text}"/>
+													</cells>
+												</ColumnListItem>
+											</items>
+										</Table>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/newfd}" class="fdCreatePage fdPageSection">
+									<VBox class="fdSectionCard fdCreateSection">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Create fixed deposit" level="H3"/>
+										</Toolbar>
+										<VBox class="fdCreateFormBody">
+											<VBox class="fdFormBlock">
+												<Text text="Deposit details" class="fdFormBlockTitle"/>
+												<FlexBox wrap="Wrap" class="fdFormGrid fdCreateGrid">
+													<VBox class="fdFormGroup"><Label text="Company Code" required="true"/><Input value="{newFd>/coCode}" placeholder="1000" showValueHelp="true" valueHelpRequest=".onCompanyCodeValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Bank" required="true"/><Input value="{newFd>/bank}" placeholder="Bank name" showValueHelp="true" valueHelpRequest=".onBankNameValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="FD number" required="true"/><Input value="{newFd>/id}" placeholder="00001"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Principal amount" required="true"/><Input value="{newFd>/principal}" type="Number" placeholder="100000"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Annual rate (%)" required="true"/><Input value="{newFd>/rate}" type="Number" placeholder="7.5"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Start date" required="true"/><DatePicker value="{newFd>/start}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Tenor (months)" required="true"/><Input value="{newFd>/tenor}" type="Number" placeholder="12"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Compounding" required="true"/><Select selectedKey="{newFd>/freq}" width="100%"><items><core:Item key="12" text="Monthly"/><core:Item key="4" text="Quarterly"/><core:Item key="2" text="Half-yearly"/><core:Item key="1" text="Yearly"/></items></Select></VBox>
+													<VBox class="fdFormGroup"><Label text="Purpose of Opening a FD" required="true"/><Input value="{newFd>/openingFd}" placeholder="Purpose" showValueHelp="true" valueHelpRequest=".onOpeningFdValueHelp"/></VBox>
+												</FlexBox>
+												<VBox class="fdRenewalOptions">
+													<CheckBox text="Auto-renewal on maturity" selected="{newFd>/autoRenew}"/>
+													<Text text="Automatically renew FD with same principal and rate" class="fdRenewalHint"/>
+													<CheckBox text="Include interest in renewal principal" selected="{newFd>/rollInterest}"/>
+													<Text text="Compound: roll maturity value into new principal" class="fdRenewalHint"/>
+												</VBox>
+											</VBox>
+											<VBox class="fdFormBlock">
+												<Text text="Accounting assignment" class="fdFormBlockTitle"/>
+												<FlexBox wrap="Wrap" class="fdFormGrid fdCreateGrid">
+													<VBox class="fdFormGroup"><Label text="FD principal GL" required="true"/><Input value="{newFd>/glP}" placeholder="110000" showValueHelp="true" valueHelpRequest=".onGlPrincipalValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Interest receivable GL" required="true"/><Input value="{newFd>/glI}" placeholder="120000" showValueHelp="true" valueHelpRequest=".onGlReceivableValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Interest income GL" required="true"/><Input value="{newFd>/glInc}" placeholder="410000" showValueHelp="true" valueHelpRequest=".onGlIncomeValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Profit Center" required="true"/><Input value="{newFd>/profitCenter}" placeholder="PC100" showValueHelp="true" valueHelpRequest=".onProfitCenterValueHelp"/></VBox>
+												</FlexBox>
+											</VBox>
+										</VBox>
+										<HBox alignItems="Center" justifyContent="End" class="fdCreateRow">
+											<Text text="{newFd>/message}" class="fdFormMessage"/>
+											<Button text="Create FD" icon="sap-icon://add" type="Emphasized" press=".onCreateFD" class="fdCreateButton"/>
+										</HBox>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/legacyfd}" class="fdCreatePage fdPageSection">
+									<VBox class="fdSectionCard fdCreateSection">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Post legacy fixed deposit" level="H3"/>
+										</Toolbar>
+										<VBox class="fdCreateFormBody">
+											<VBox class="fdFormBlock">
+												<Text text="Legacy FD details" class="fdFormBlockTitle"/>
+												<FlexBox wrap="Wrap" class="fdFormGrid fdCreateGrid">
+													<VBox class="fdFormGroup"><Label text="Company Code" required="true"/><Input value="{legacyFd>/coCode}" placeholder="1000" showValueHelp="true" valueHelpRequest=".onLegacyCompanyCodeValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Bank" required="true"/><Input value="{legacyFd>/bank}" placeholder="Bank name" showValueHelp="true" valueHelpRequest=".onLegacyBankNameValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="FD number" required="true"/><Input value="{legacyFd>/id}" placeholder="00001"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Principal amount" required="true"/><Input value="{legacyFd>/principal}" type="Number" placeholder="100000"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Annual rate (%)" required="true"/><Input value="{legacyFd>/rate}" type="Number" placeholder="7.5"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Start date" required="true"/><DatePicker value="{legacyFd>/start}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Tenor (months)" required="true"/><Input value="{legacyFd>/tenor}" type="Number" placeholder="12"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Compounding" required="true"/><Select selectedKey="{legacyFd>/freq}" width="100%"><items><core:Item key="12" text="Monthly"/><core:Item key="4" text="Quarterly"/><core:Item key="2" text="Half-yearly"/><core:Item key="1" text="Yearly"/></items></Select></VBox>
+													<VBox class="fdFormGroup"><Label text="Purpose of Opening a FD" required="true"/><Input value="{legacyFd>/openingFd}" placeholder="Purpose" showValueHelp="true" valueHelpRequest=".onLegacyOpeningFdValueHelp"/></VBox>
+												</FlexBox>
+											</VBox>
+											<VBox class="fdFormBlock">
+												<Text text="Accounting assignment" class="fdFormBlockTitle"/>
+												<FlexBox wrap="Wrap" class="fdFormGrid fdCreateGrid">
+													<VBox class="fdFormGroup"><Label text="FD principal GL" required="true"/><Input value="{legacyFd>/glP}" placeholder="110000" showValueHelp="true" valueHelpRequest=".onLegacyGlPrincipalValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Interest receivable GL" required="true"/><Input value="{legacyFd>/glI}" placeholder="120000" showValueHelp="true" valueHelpRequest=".onLegacyGlReceivableValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Interest income GL" required="true"/><Input value="{legacyFd>/glInc}" placeholder="410000" showValueHelp="true" valueHelpRequest=".onLegacyGlIncomeValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Profit Center" required="true"/><Input value="{legacyFd>/profitCenter}" placeholder="PC100" showValueHelp="true" valueHelpRequest=".onLegacyProfitCenterValueHelp"/></VBox>
+													<VBox class="fdFormGroup"><Label text="Generated Accounting Document"/><Input value="{legacyFd>/fdDocNo}" editable="false"/></VBox>
+												</FlexBox>
+											</VBox>
+										</VBox>
+										<HBox alignItems="Center" justifyContent="End" class="fdCreateRow">
+											<Text text="{legacyFd>/message}" class="fdFormMessage"/>
+											<Button text="Post Accounting Document" icon="sap-icon://accounting-document-verification" type="Emphasized" press=".onPostLegacyFD" class="fdCreateButton"/>
+										</HBox>
+									</VBox>
+								</VBox>
+
+								<VBox visible="{ui>/visible/settings}" class="fdPageSection">
+									<VBox class="fdSectionCard fdSettingsSection">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Accrual and posting settings" level="H3"/>
+										</Toolbar>
+										<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Auto month-end accrual posting"/><Text text="Post interest entry on last calendar day of month" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+										<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Auto first-day reversal"/><Text text="Reverse previous month accrual on 1st of next month" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+										<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Maturity alarm - 30 days"/><Text text="Alert 30 days before maturity date" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+										<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Maturity alarm - 15 days"/><Text text="Alert 15 days before maturity" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+										<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Maturity alarm - 7 days"/><Text text="Urgent alert 7 days before maturity" class="fdMuted"/></VBox><Switch state="true"/></FlexBox>
+										<FlexBox class="fdToggleRow" justifyContent="SpaceBetween" alignItems="Center"><VBox><Text text="Post maturity accounting automatically"/><Text text="On maturity date, auto-post settlement entries" class="fdMuted"/></VBox><Switch state="false"/></FlexBox>
+									</VBox>
+									<VBox class="fdSectionCard fdSettingsSection">
+										<Toolbar class="fdSectionHeader">
+											<Title text="Default GL mapping" level="H3"/>
+										</Toolbar>
+										<FlexBox wrap="Wrap" class="fdFormGrid">
+											<VBox class="fdFormGroup"><Label text="FD principal GL"/><Input value=""/></VBox>
+											<VBox class="fdFormGroup"><Label text="Interest receivable GL"/><Input value=""/></VBox>
+											<VBox class="fdFormGroup"><Label text="Interest income GL"/><Input value=""/></VBox>
+											<VBox class="fdFormGroup"><Label text="Bank settlement GL"/><Input value=""/></VBox>
+										</FlexBox>
+										<Button text="Save settings" icon="sap-icon://save" type="Emphasized" press=".onSaveSettings" class="fdActionButton"/>
+									</VBox>
+								</VBox>
+							</ScrollContainer>
+						</VBox>
+					</HBox>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

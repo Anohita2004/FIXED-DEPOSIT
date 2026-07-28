@@ -1,0 +1,98 @@
+<mvc:View
+    controllerName="com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.MaturityHistory"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        showHeader="false"
+        class="fdContentPage horizonDashboardPage">
+
+        <content>
+            <VBox class="fdPageSection horizonSection">
+
+                <VBox class="fdSectionCard horizonChartCard">
+                    <Toolbar class="fdSectionHeader horizonHeader">
+                        <core:Icon
+                            src="sap-icon://history"
+                            class="fdMetricIcon fdMetricIconTeal"/>
+                        <Title
+                            text="Maturity History"
+                            level="H3"/>
+                        <ToolbarSpacer/>
+                        <SearchField
+                            width="18rem"
+                            placeholder="Search FD, Bank, Document..."
+                            liveChange=".onSearch"/>
+                        <Button
+                            icon="sap-icon://sort"
+                            tooltip="Sort"
+                            type="Transparent"
+                            press=".onSort"/>
+                        <Button
+                            icon="sap-icon://filter"
+                            tooltip="Filter"
+                            type="Transparent"
+                            press=".onFilter"/>
+                        <Button
+                            icon="sap-icon://excel-attachment"
+                            tooltip="Export"
+                            type="Transparent"
+                            press=".onExport"/>
+                        <Button
+                            icon="sap-icon://refresh"
+                            text="Refresh"
+                            type="Transparent"
+                            press=".onRefresh"/>
+                    </Toolbar>
+
+                    <Table
+                        id="maturityHistoryTable"
+                        growing="true"
+                        growingThreshold="50"
+                        sticky="ColumnHeaders"
+                        items="{/maturityHistory}"
+                        class="fdDataTable">
+                        <columns>
+                            <Column width="120px"><Text text="Company Code"/></Column>
+                            <Column width="120px"><Text text="FD Number"/></Column>
+                            <Column width="150px"><Text text="Bank"/></Column>
+                            <Column width="120px" hAlign="End"><Text text="Principal"/></Column>
+                            <Column width="100px" hAlign="End"><Text text="Rate"/></Column>
+                            <Column width="140px" hAlign="End"><Text text="Expected Interest"/></Column>
+                            <Column width="140px" hAlign="End"><Text text="Actual Interest"/></Column>
+                            <Column width="120px" hAlign="End"><Text text="TDS Amount"/></Column>
+                            <Column width="100px" hAlign="Center"><Text text="TDS Applicable"/></Column>
+                            <Column width="160px"><Text text="Maturity Doc No"/></Column>
+                            <Column width="160px"><Text text="Accounting Doc"/></Column>
+                            <Column width="120px"><Text text="Posting Date"/></Column>
+                            <Column width="130px" hAlign="Center"><Text text="Maturity Type"/></Column>
+                            <Column width="100px" hAlign="Center"><Text text="Status"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{coCode}" class="fdMono"/>
+                                    <ObjectIdentifier title="{fdAccno}"/>
+                                    <Text text="{bankName}"/>
+                                    <ObjectNumber number="{principalAmtText}" unit="INR" class="fdMono"/>
+                                    <Text text="{interestRateText}" class="fdMono"/>
+                                    <ObjectNumber number="{expectedInterestAmtText}" unit="INR" class="fdMono"/>
+                                    <ObjectNumber number="{actualInterestAmtText}" unit="INR" class="fdMono"/>
+                                    <ObjectNumber number="{tdsAmt}" unit="INR" class="fdMono"/>
+                                    <ObjectStatus text="{tdsApplicable}" state="{tdsState}"/>
+                                    <Link text="{tdsDocNo}" press=".onDisplayJournalEntry" class="fdMono"/>
+                                    <Link text="{fdDocNo}" press=".onDisplayJournalEntry" class="fdMono"/>
+                                    <Text text="{postingDateText}"/>
+                                    <ObjectStatus text="{maturityType}" state="{maturityTypeState}"/>
+                                    <ObjectStatus text="{statusText}" state="{statusState}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
