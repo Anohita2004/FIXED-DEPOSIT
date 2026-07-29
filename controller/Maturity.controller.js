@@ -203,14 +203,7 @@ sap.ui.define([
             var oToday = new Date();
             oToday.setHours(0, 0, 0, 0);
 
-            var oEffectiveMaturityDate;
-            if (oToday < oScheduledMaturityDate) {
-                // Premature FD
-                oEffectiveMaturityDate = new Date(oToday.getTime());
-            } else {
-                // Normal or overdue maturity
-                oEffectiveMaturityDate = new Date(oScheduledMaturityDate.getTime());
-            }
+            var oEffectiveMaturityDate = new Date(oToday.getTime());
 
             var iDiffTime = oEffectiveMaturityDate.getTime() - oStartDateObj.getTime();
             var iInterestDays = Math.floor(iDiffTime / (1000 * 3600 * 24)) + 1;
@@ -265,7 +258,7 @@ sap.ui.define([
                     colorClass: "fdBlueIcon",
                     title: "Fixed Deposit Created",
                     subtitle: "Principal: " + oModel.getProperty("/principal") + " INR",
-                    dateText: sCreateDate || sStartDate
+                    dateText: sStartDate
                 },
                 {
                     icon: "sap-icon://simulate",

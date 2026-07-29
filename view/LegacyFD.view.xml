@@ -48,7 +48,7 @@
 							<Label text="Annual Rate (%)" required="true"/>
 							<Input value="{legacyFd>/rate}" type="Number"/>
 
-							<Label text="Start Date" required="true"/>
+							<Label text="Posting Date" required="true"/>
 							<DatePicker value="{legacyFd>/start}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM yyyy"/>
 
 							<Label text="Creation Date" required="true"/>

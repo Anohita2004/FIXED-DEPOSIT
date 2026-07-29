@@ -218,11 +218,6 @@ sap.ui.define([
                                 if (oCreateDateObj.getTime() < oScheduledDate.getTime()) {
                                     sMaturityType = "Premature";
                                     sMaturityTypeState = "Warning";
-                                    oStartDateObj.setHours(0,0,0,0);
-                                    var iDiffTime = oCreateDateObj.getTime() - oStartDateObj.getTime();
-                                    var iInterestDays = Math.floor(iDiffTime / (1000 * 3600 * 24)) + 1;
-                                    if (iInterestDays < 0) iInterestDays = 0;
-                                    fActualInterest = (fPrincipal * fRate * iInterestDays) / 36500;
                                 } else {
                                     if (oCreateDateObj.getTime() > oScheduledDate.getTime()) {
                                         sMaturityType = "Over Matured";
@@ -231,13 +226,14 @@ sap.ui.define([
                                         sMaturityType = "Matured";
                                         sMaturityTypeState = "Success";
                                     }
-                                    // For Matured and Over Matured, calculate interest up to Scheduled Date using exact days (inclusive)
-                                    oStartDateObj.setHours(0,0,0,0);
-                                    var iDiffTime = oScheduledDate.getTime() - oStartDateObj.getTime();
-                                    var iInterestDays = Math.floor(iDiffTime / (1000 * 3600 * 24)) + 1;
-                                    if (iInterestDays < 0) iInterestDays = 0;
-                                    fActualInterest = (fPrincipal * fRate * iInterestDays) / 36500;
                                 }
+                                
+                                // Calculate interest up to the exact processing date (inclusive) for all maturity types
+                                oStartDateObj.setHours(0,0,0,0);
+                                var iDiffTime = oCreateDateObj.getTime() - oStartDateObj.getTime();
+                                var iInterestDays = Math.floor(iDiffTime / (1000 * 3600 * 24)) + 1;
+                                if (iInterestDays < 0) iInterestDays = 0;
+                                fActualInterest = (fPrincipal * fRate * iInterestDays) / 36500;
                             }
                         }
 
