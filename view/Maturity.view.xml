@@ -20,6 +20,7 @@
                         <core:Icon src="sap-icon://action" class="fdMetricIcon fdMetricIconTeal"/>
                         <Title text="Select Fixed Deposit" level="H3"/>
                         <ToolbarSpacer/>
+                        <Button icon="sap-icon://refresh" tooltip="Refresh FD List" press=".onRefreshFDList" type="Transparent" />
                         <Button text="View History" icon="sap-icon://history" press=".onNavMaturityHistory" type="Transparent" />
                     </Toolbar>
 

@@ -294,6 +294,16 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("maturityHistory");
         },
 
+        onRefreshFDList: function() {
+            // Clear current selection to prevent stale data
+            var oMaturityModel = this.getView().getModel("maturity");
+            if (oMaturityModel) {
+                oMaturityModel.setProperty("/fdNumber", "");
+            }
+            this._loadFdList();
+            sap.m.MessageToast.show("FD List refreshed");
+        },
+
         onTDSSelect: function (oEvent) {
             var bSelected = oEvent.getParameter("selected");
             if (bSelected) {
