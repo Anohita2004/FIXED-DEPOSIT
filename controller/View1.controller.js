@@ -238,8 +238,25 @@ sap.ui.define([
 				return;
 			}
 
-			if (!sCoCode || !sId || !sBank || !sPrincipal || !sRate || !oData.start || !sTenor || !oData.freq || !sOpeningFd || !oData.glP || !oData.glI || !oData.glInc || !sProfitCenter) {
-				oNewFdModel.setProperty("/message", "Please fill all required fields.");
+			var aMissing = [];
+			if (!sCoCode) aMissing.push("Company Code");
+			if (!sId) aMissing.push("FD Number");
+			if (!sBank) aMissing.push("Bank Name");
+			if (!sPrincipal || Number(sPrincipal) <= 0) aMissing.push("Valid Principal Amount");
+			if (!sRate || Number(sRate) <= 0) aMissing.push("Valid Interest Rate");
+			if (!oData.start) aMissing.push("Start Date");
+			if (!sTenor || Number(sTenor) <= 0) aMissing.push("Valid Tenor (Months)");
+			if (!oData.freq) aMissing.push("Compounding Frequency");
+			if (!sOpeningFd) aMissing.push("Purpose of Opening");
+			if (!oData.glP) aMissing.push("Principal GL");
+			if (!oData.glI) aMissing.push("Interest Receivable GL");
+			if (!oData.glInc) aMissing.push("Interest Income GL");
+			if (!sProfitCenter) aMissing.push("Profit Center");
+
+			if (aMissing.length > 0) {
+				var sErrorMsg = "Please fill in the following required fields:\n\n• " + aMissing.join("\n• ");
+				oNewFdModel.setProperty("/message", "Validation failed.");
+				sap.m.MessageBox.error(sErrorMsg, { title: "Missing Information" });
 				return;
 			}
 
@@ -293,8 +310,26 @@ sap.ui.define([
 				return;
 			}
 
-			if (!sCoCode || !sId || !sBank || !sPrincipal || !sRate || !oData.start || !sTenor || !oData.freq || !sOpeningFd || !oData.glP || !oData.glI || !oData.glInc || !sProfitCenter) {
-				oLegacyModel.setProperty("/message", "Please fill all required fields.");
+			var aMissing = [];
+			if (!sCoCode) aMissing.push("Company Code");
+			if (!sId) aMissing.push("FD Number");
+			if (!sBank) aMissing.push("Bank Name");
+			if (!sPrincipal || Number(sPrincipal) <= 0) aMissing.push("Valid Principal Amount");
+			if (!sRate || Number(sRate) <= 0) aMissing.push("Valid Interest Rate");
+			if (!oData.start) aMissing.push("Start Date");
+			if (!sTenor || Number(sTenor) <= 0) aMissing.push("Valid Tenor (Months)");
+			if (!oData.freq) aMissing.push("Compounding Frequency");
+			if (!sOpeningFd) aMissing.push("Purpose of Opening");
+			if (!oData.glP) aMissing.push("Principal GL");
+			if (!oData.glI) aMissing.push("Interest Receivable GL");
+			if (!oData.glInc) aMissing.push("Interest Income GL");
+			if (!sProfitCenter) aMissing.push("Profit Center");
+			if (!oData.fdDocNo) aMissing.push("Accounting Document Number");
+
+			if (aMissing.length > 0) {
+				var sErrorMsg = "Please fill in the following required fields:\n\n• " + aMissing.join("\n• ");
+				oLegacyModel.setProperty("/message", "Validation failed.");
+				sap.m.MessageBox.error(sErrorMsg, { title: "Missing Information" });
 				return;
 			}
 

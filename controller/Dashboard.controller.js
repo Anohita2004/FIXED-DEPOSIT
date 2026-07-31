@@ -6,8 +6,17 @@ sap.ui.define([
 	"sap/m/BusyDialog",
 	"../util/DashboardChartHelper",
 	"sap/ui/model/json/JSONModel",
-	"sap/viz/ui5/controls/Popover"
-], function(BaseController, MessageBox, Filter, FilterOperator, BusyDialog, DashboardChartHelper, JSONModel, Popover) {
+	"sap/viz/ui5/controls/Popover",
+	"sap/m/Dialog",
+	"sap/m/DatePicker",
+	"sap/m/VBox",
+	"sap/m/Text",
+	"sap/m/Button",
+	"sap/m/Table",
+	"sap/m/Column",
+	"sap/m/ColumnListItem",
+	"sap/m/ObjectStatus"
+], function(BaseController, MessageBox, Filter, FilterOperator, BusyDialog, DashboardChartHelper, JSONModel, Popover, Dialog, DatePicker, VBox, Text, Button, Table, Column, ColumnListItem, ObjectStatus) {
 	"use strict";
 
 	return BaseController.extend("com.infocus.zfifixeddepositZFI_FIXED_DEPOSIT.controller.Dashboard", {
@@ -166,22 +175,51 @@ sap.ui.define([
 				return;
 			}
 
-			MessageBox.confirm(
-				"Run Month End for " + sMonth + " for " + aEligibleFds.length + " selected Fixed Deposit(s)?",
-				{
-					title: "Month End - " + sMonth,
-					actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-					emphasizedAction: MessageBox.Action.YES,
-					onClose: function(sAction) {
-						if (sAction === MessageBox.Action.YES) {
-							this._processMonthEnd(aEligibleFds, oTable);
+			var oDatePicker = new DatePicker({
+				valueFormat: "yyyy-MM-dd",
+				displayFormat: "dd MMM yyyy",
+				dateValue: new Date()
+			});
+
+			var oDialog = new Dialog({
+				title: "Month End - " + sMonth,
+				content: [
+					new VBox({
+						items: [
+							new Text({ text: "Run Month End for " + aEligibleFds.length + " selected Fixed Deposit(s)?\n\nPlease select Posting Date:" }),
+							oDatePicker
+						]
+					}).addStyleClass("sapUiSmallMargin")
+				],
+				beginButton: new Button({
+					text: "Run",
+					type: "Emphasized",
+					press: function() {
+						var oSelectedDate = oDatePicker.getDateValue();
+						if (!oSelectedDate) {
+							MessageBox.error("Please select a posting date.");
+							return;
 						}
+						this._processMonthEnd(aEligibleFds, oTable, oSelectedDate);
+						oDialog.close();
 					}.bind(this)
+				}),
+				endButton: new Button({
+					text: "Cancel",
+					press: function() {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
 				}
-			);
+			});
+			
+			this.getView().addDependent(oDialog);
+			oDialog.open();
 		},
 
-		_processMonthEnd: function(aSelectedFds, oTable) {
+		_processMonthEnd: function(aSelectedFds, oTable, oPostingDate) {
 			var oBusy = new BusyDialog({ text: "Running Month End..." });
 			oBusy.open();
 
@@ -207,12 +245,11 @@ sap.ui.define([
 
 					// Backend BAPI_ACC_DOCUMENT_POST will fail if GL accounts or Profit Center are missing.
 					if (!oFd.glP || !oFd.glI || !oFd.glInc || !oFd.profitCenter) {
-						MessageBox.error("Cannot run Month End for FD " + oFd.id + " because GL Accounts or Profit Center are missing. Please ensure the FD is fully configured.");
-						resolve({ status: "Error", id: oFd.id });
+						resolve({ status: "Error", id: oFd.id, message: "GL Accounts or Profit Center are missing." });
 						return;
 					}
 
-					var oStartDate = oFd.start ? this._toODataDateTime(oFd.start) : null;
+					var oStartDate = oPostingDate ? this._toODataDateTime(oPostingDate) : (oFd.start ? this._toODataDateTime(oFd.start) : null);
 					var oCreateDate = oFd.creationDate ? this._toODataDateTime(oFd.creationDate) : null;
 
 					var bStartDateValid = oStartDate instanceof Date && !isNaN(oStartDate.getTime());
@@ -279,43 +316,25 @@ sap.ui.define([
 								status: "Success",
 								id: oFd.id,
 								docNo: sDocNo,
-								revNo: sRevNo
+								revNo: sRevNo,
+								message: "Month End posted successfully"
 							});
 
 						}.bind(this),
 
 					error: function (oError) {
+						var sBackendMessage = this._extractODataError(oError);
 
-    var sBackendMessage = "";
+						if (sBackendMessage && sBackendMessage.toLowerCase().indexOf("already processed") !== -1) {
+							sBackendMessage = "Month End already performed for this month.";
+						}
 
-    try {
-        var oResponse = JSON.parse(oError.responseText);
-        sBackendMessage = oResponse.error.message.value || "";
-    } catch (e) {}
-
-    if (sBackendMessage &&
-        sBackendMessage.toLowerCase().indexOf("already processed") !== -1) {
-
-        MessageBox.information(
-            "Month End for the current month has already been performed for Fixed Deposit " +
-            oFd.id +
-            ". No further Month End processing is allowed. Month End can be performed again in the next month."
-        );
-
-    } else {
-
-        MessageBox.error(
-            sBackendMessage || "Failed to process Month End."
-        );
-
-    }
-
-    resolve({
-        status: "Error",
-        id: oFd.id
-    });
-
-}.bind(this)
+						resolve({
+							status: "Error",
+							id: oFd.id,
+							message: sBackendMessage || "Failed to process Month End."
+						});
+					}.bind(this)
 
 					}); // closes oServiceModel.read()
 
@@ -326,22 +345,40 @@ sap.ui.define([
 			Promise.all(aPromises).then(function (aResults) {
 
 				oBusy.close();
-
-				var iSuccess = aResults.filter(function (oResult) {
-					return oResult.status === "Success";
-				}).length;
-
-				MessageBox.success(
-					"Month End Completed\n\n" +
-					"Processed : " + aResults.length + "\n" +
-					"Successful : " + iSuccess + "\n" +
-					"Failed : " + (aResults.length - iSuccess)
-				);
-
 				oTable.removeSelections(true);
-
-				// Refresh dashboard while preserving original Accounting Document
 				this.getView().getModel().setData(this._buildAppData());
+
+				var oModel = new JSONModel(aResults);
+				var oTableControl = new Table({
+					columns: [
+						new Column({ header: new Text({ text: "FD Number" }) }),
+						new Column({ header: new Text({ text: "Status" }) }),
+						new Column({ header: new Text({ text: "Message" }) })
+					]
+				});
+				oTableControl.setModel(oModel);
+				oTableControl.bindItems("/", new ColumnListItem({
+					cells: [
+						new Text({ text: "{id}" }),
+						new ObjectStatus({
+							text: "{status}",
+							state: "{= ${status} === 'Success' ? 'Success' : 'Error' }"
+						}),
+						new Text({ text: "{message}" })
+					]
+				}));
+
+				var oDialog = new Dialog({
+					title: "Month End Batch Summary",
+					contentWidth: "700px",
+					content: [oTableControl],
+					endButton: new Button({
+						text: "Close",
+						press: function () { oDialog.close(); oDialog.destroy(); }
+					})
+				});
+				this.getView().addDependent(oDialog);
+				oDialog.open();
 
 			}.bind(this));
 		}

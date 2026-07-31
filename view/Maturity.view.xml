@@ -213,7 +213,7 @@
 
                     <VBox class="fdRenewalOptions">
                         <CheckBox
-                            text="TDS Applicable"
+                            text="Mature"
                             selected="{maturity>/tdsApplicable}"
                             select=".onTDSSelect"/>
                         <Text

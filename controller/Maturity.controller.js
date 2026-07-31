@@ -219,6 +219,7 @@ sap.ui.define([
             // Calculate Interest Amount upfront based on effective days
             var fInterest = (fPrincipal * fRate * iInterestDays) / 36500;
             var sEffectiveMaturityDateText = oDateFormat.format(oEffectiveMaturityDate);
+            var sScheduledMaturityDateText = oDateFormat.format(oScheduledMaturityDate);
 
             oModel.setData({
                 fdNumber: oData.FdAccno,
@@ -272,7 +273,7 @@ sap.ui.define([
                     colorClass: "fdOrangeIcon",
                     title: "Maturity Scheduled",
                     subtitle: (oToday < oScheduledMaturityDate) ? "Premature Maturity" : "Awaiting processing",
-                    dateText: sEffectiveMaturityDateText
+                    dateText: sScheduledMaturityDateText
                 }
             ];
             oModel.setProperty("/timeline", aTimeline);
@@ -306,12 +307,18 @@ sap.ui.define([
 
         onTDSSelect: function (oEvent) {
             var bSelected = oEvent.getParameter("selected");
+            var oModel = this.getView().getModel("maturity");
+            
             if (bSelected) {
+                if (!oModel.getProperty("/fdNumber")) {
+                    sap.m.MessageBox.error("Please select a Fixed Deposit from the list before processing Maturity.");
+                    oEvent.getSource().setSelected(false);
+                    return;
+                }
                 // User checks TDS -> run maturity processing with TDS_IND='X'
                 this._fetchMaturityDetails(true);
             } else {
                 // Unchecked -> normal display only, clear TDS-specific fields
-                var oModel = this.getView().getModel("maturity");
                 oModel.setProperty("/tdsAmount", 0);
                 oModel.setProperty("/tdsGl", "");
                 oModel.setProperty("/tdsDocNo", "");
