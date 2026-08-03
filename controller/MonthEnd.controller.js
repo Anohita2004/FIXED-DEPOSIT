@@ -240,12 +240,12 @@ sap.ui.define([
         startDate: oEntity.StartDate,
         fdDocNo: oEntity.FdDocNo,
         fdRevNo: oEntity.FD_REV_NO,
-        postingDateText: oEntity.CREATE_DATE ?
-            this._fmtDate(this._parseODataDate(oEntity.CREATE_DATE)) : "",
+        postingDateText: oEntity.StartDate ?
+            this._fmtDate(this._parseODataDate(oEntity.StartDate)) : (oEntity.CREATE_DATE ? this._fmtDate(this._parseODataDate(oEntity.CREATE_DATE)) : ""),
         // Month-end always closes the calendar month it is run in, so the
         // month it was "performed for" is the month of the posting date.
-        monthEndForText: oEntity.CREATE_DATE ?
-            this._fmtMonthYear(this._parseODataDate(oEntity.CREATE_DATE)) : "",
+        monthEndForText: oEntity.StartDate ?
+            this._fmtMonthYear(this._parseODataDate(oEntity.StartDate)) : (oEntity.CREATE_DATE ? this._fmtMonthYear(this._parseODataDate(oEntity.CREATE_DATE)) : ""),
         processedBy: "Auto",
         statusText: oEntity.LV_IND === "X" ? "Success" : "Failed",
         statusState: oEntity.LV_IND === "X" ? "Success" : "Error"
